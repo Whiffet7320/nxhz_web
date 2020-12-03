@@ -183,7 +183,6 @@
                   v-if="popInp"
                   >上传</el-button
                 >
-                
               </div>
               <i class="el-icon-picture" slot="reference" @click="popInps2"></i>
             </el-popover>
