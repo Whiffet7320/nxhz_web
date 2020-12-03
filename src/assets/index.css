@@ -1,0 +1,265 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+html, body, .wrapper{
+    height: 100%;
+}
+.wrapper{
+    position: relative;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+.header{
+    width: 100%;
+    height: 70px;
+    background-color: #354457
+}
+.header .logo{
+    width: 300px;
+    height: 70px;
+    line-height: 70px;
+    color: #fff;
+    font-size: 14px;
+    margin-left: 50px;
+}
+.header .logo img{
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;    /* 居中 */
+    border: 2px solid #fff;
+    margin-right: 20px;
+}
+.left-menu{
+    width: 200px;
+    height: calc(100% - 70px);
+    background-color: #4d5e70;
+}
+.left-menu dl{
+    color: #b3bcc5;
+    font-size: 14px;
+    height: 40px;  
+    line-height: 40px;  
+}
+.left-menu dl dt{
+    font-weight: bold;
+    padding-left: 8px;
+}
+.left-menu dl dd{
+    padding-left: 35px;
+    cursor: pointer;
+}
+.left-menu dl dd:hover{
+    background-color:rgba(204, 203, 203, 0.863);
+    color: #354457;
+}
+.router-link-exact-active{
+    background-color: rgba(204, 203, 203, 0.863);
+    color: red;
+}
+#menu-list .active{
+    background-color: #354457;
+}
+#menu-list .student-list{
+    background-color: rgba(204, 203, 203, 0.863);
+}
+/* .left-menu dl dd{
+    background-color: #354457;
+    color: #ddd;
+} */
+.right-content{
+    position: absolute;
+    min-width: 500px;
+    top: 0px;
+    left: 200px;
+    margin-top: 70px;
+    width: calc(100% - 200px);
+    height: calc(100% - 70px);
+    background-color: #fff;
+}
+.right-content .content{
+    /* display: none; */
+}
+.right-content .content.content-active{
+    display: block;
+}
+.right-content .add-student.content{
+    width: 400px;
+    margin: 50px auto;
+    /* border: 1px solid black; */
+}
+.right-content  form label{
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    margin-right: 10px;
+    font-size: 14px;
+}
+.content form div{
+    margin: 10px;
+}
+.content form label.redio-label{
+    width: 20px;
+}
+.content form input{
+    font-size: 16px;
+}
+.content form .btn{
+    width: 85px;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 10px;
+}
+
+
+.right-content .student-list table{
+    width: 100%;
+    text-align: center;
+}
+.right-content .student-list table .top{
+    background-color: #e3e8ee;  
+    color: #646987;
+}
+.right-content .student-list table .bottom{
+    background-color: #fff;
+}
+.right-content .student-list table{
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+}
+.right-content .student-list table .btn{
+    border: none;
+    padding: 3px 8px;
+    color: #fff;
+}
+.right-content .student-list table .btn.edit{
+    background-color: #5cb85c;
+    cursor: pointer;
+}
+.right-content .student-list table .btn.edit:hover{
+    background-color: #255625
+}
+.right-content .student-list table .btn.del{
+    background-color: #d9534f;
+    cursor: pointer;
+}
+.right-content .student-list table .btn.del:hover{
+    background-color: #c9302c
+}
+/* 页 */
+.right-content .student-list .pageTo{
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1000px;
+    margin-left: -500px;
+    text-align: center;
+}
+.right-content .student-list .pageTo span{
+    padding: 4px 10px;
+    color: #38f;
+    margin:10px;
+    font-size: 14px;
+    border: 1px solid #c7c7c7;
+    cursor: pointer;
+}
+.right-content .student-list .pageTo span:hover{
+    border:1px solid #38f;
+}
+.right-content .student-list .pageTo .active11{
+    color: #000;
+    
+}
+/* 弹窗 */
+.student-list .dialog.show{
+    display: block;
+}
+.student-list .dialog{
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* display: none; */
+}
+.student-list .dialog .mask{
+    position: fixed;
+    background-color: black;
+    opacity: 0.3;
+    width: 100%;
+    height: 100%;
+}
+.student-list .dialog .dialog-concent{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -250px;
+    margin-top: -175px;
+    width: 500px;
+    height: 350px;
+    background-color: #fff;
+    padding: 10px;
+}
+.student-list .dialog .dialog-concent form{
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+/* .left-menu{
+    width: 200px;
+    height: calc(100% - 70px);
+    background-color: #4d5e70;
+    color:#b3bcc5;
+    position: relative;
+    z-index: 1;
+}
+.left-menu dl dt{
+    font-weight: bold;
+    padding-left: 8px;
+}
+.left-menu dl dt, .left-menu dl dd{
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+} 
+.left-menu dl dd:hover{
+    background-color: rgba(255,255,255,0);
+    cursor: pointer;
+}
+.left-menu dl dd.active{
+    background-color: #ddd;
+    color: #354457
+}
+.right-content{
+    position: absolute;
+    width: calc(100% -200px);
+    padding-left: 200px;
+    top: 70px;
+}
+.right-content .content{
+    display: none;
+}
+.right-content .content.content-active{
+    display: block;
+}
+.content.add-student {
+    margin: 50px auto;
+    width: 400px;
+    border: 1px solid #000
+}
+.content form label{
+    display: inline-block;
+    width: 100px;
+} */
