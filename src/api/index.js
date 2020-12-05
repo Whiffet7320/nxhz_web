@@ -424,5 +424,13 @@ export default {
             //     'token': sessionStorage.getItem("token")
             // },
         })
-    }
+    },
+    commentList(obj) {//评论列表
+        return myGet({
+            url: urls.commentList,
+            params: {
+                ...obj
+            },
+        })
+    },
 }

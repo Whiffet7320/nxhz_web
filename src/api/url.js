@@ -22,4 +22,5 @@ export default {
     ossststoken:'/shop/oss/ststoken',//oss上传获取ststoken
     imageList:'/shop/goods/image/list',//获取商品相册列表
     imageChange:'/shop/goods/image/change',//添加&删除图片
+    commentList:'/shop/order/comment/list',//评论列表
 }
