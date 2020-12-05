@@ -87,7 +87,6 @@
                           :src="ele.content"
                           class="img_cyy"
                           v-if="ele.type == 1"
-                          @click="imgClick"
                         />
                         <div class="dplayer" v-else-if="ele.type == 3"></div>
                         <p v-else>{{ ele.content }}</p>
@@ -128,13 +127,11 @@
                           :src="ele.content"
                           class="img_cyy"
                           v-if="ele.type == 1"
-                          @click="imgClick"
                         />
                         <p v-else-if="ele.type == 11">
                           <img
                             :src="ele.content.goods_image"
                             class="img_cyy"
-                            @click="imgClick"
                           />
                           <span class="spanRed popspan"
                             >¥{{ ele.content.shop_price }}</span
@@ -271,13 +268,13 @@ export default {
   created() {
     this.isDotList = this.isDotNum;
     console.log(this.client_id);
-    // this.$api.bindShop(this.client_id).then((res) => {
-    //   //绑定client_id到shop_id
-    //   console.log(res);
-    //   console.log(res.data.info);
-    //   this.getLeftUserList();
-    // });
-    this.getLeftUserList();
+    this.$api.bindShop(this.client_id).then((res) => {
+      //绑定client_id到shop_id
+      console.log(res);
+      console.log(res.data.info);
+      this.getLeftUserList();
+    });
+    // this.getLeftUserList();
     // oss
   },
   mounted() {
@@ -306,9 +303,6 @@ export default {
     },
   },
   methods: {
-    imgClick() {
-      console.log("156123");
-    },
     Inpcompany() {
       console.log(this.oppinput);
       this.sendBtn();

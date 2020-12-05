@@ -132,7 +132,8 @@ const routes = [
     {
         path: 'webSocket',//聊天室(客服)
         name: 'webSocket',
-        component: () => import('./components/webSocket/webSocket.vue')
+        // redirect: '/operate/operatetest',
+        component: () => import('./components/webSocket/webSocket.vue'),
         // component:()=>import('./components/webSocket/player.vue')
     },
     {
