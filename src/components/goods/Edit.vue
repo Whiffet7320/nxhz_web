@@ -161,6 +161,14 @@
                 >
               </template>
             </el-table-column>
+            <el-table-column prop="sort" label="排序">
+              <template scope="scope">
+                <div class="input-box">
+                  <!-- @blur="handleInputBlur" -->
+                  <el-input size="small" v-model="scope.row.sort"></el-input>
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column fixed="right" label="操作" width="120">
               <template slot-scope="scope">
                 <el-button
@@ -494,11 +502,12 @@ export default {
           storage: myNewStorage,
           unit: scope.row.unit,
           is_on_sale: scope.row.is_on_sale,
+          sort: scope.row.sort,
         };
         console.log(skuNewObj2);
         this.$api.skuEdit(skuNewObj2).then((res) => {
           console.log(res);
-        });
+        })
       } else {
         // 添加
         console.log(scope.row);
@@ -519,10 +528,6 @@ export default {
           console.log(res);
         });
       }
-      this.$message({
-        message: "已保存",
-        type: "success",
-      });
     },
     getData() {
       this.loading = true;
@@ -721,10 +726,10 @@ export default {
 .shop-form #editor img {
   max-width: 100%;
 }
-.shop-form #editor .w-e-toolbar{
+.shop-form #editor .w-e-toolbar {
   z-index: 1 !important;
 }
-.shop-form #editor .w-e-text-container{
+.shop-form #editor .w-e-text-container {
   z-index: 0 !important;
 }
 .shop-form .displayN {

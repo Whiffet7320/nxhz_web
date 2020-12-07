@@ -5,7 +5,7 @@
       <el-table-column
         prop="user"
         label="用户信息"
-        width="250"
+        min-width="150"
         :show-overflow-tooltip="true"
       >
         <template slot-scope="scope">
@@ -15,43 +15,74 @@
       <el-table-column
         prop="item_id"
         label="订单号"
+        min-width="100"
         :show-overflow-tooltip="true"
       >
-      </el-table-column>
-      <el-table-column label="是否有图">
-        <template slot-scope="scope">
-          <!-- <input type="text" v-model="scope.row.checkedFather" /> -->
-          <el-checkbox v-model="scope.row.isImg"></el-checkbox>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否匿名">
-        <template slot-scope="scope">
-          <!-- <input type="text" v-model="scope.row.checkedFather" /> -->
-          <el-checkbox v-model="scope.row.isName"></el-checkbox>
-        </template>
       </el-table-column>
       <el-table-column
         prop="comment_time"
         label="评论时间"
+        min-width="90"
         :show-overflow-tooltip="true"
       >
       </el-table-column>
-      <el-table-column prop="address5" label="商品评分">
+      <el-table-column
+        prop="address5"
+        label="商品评分"
+        min-width="140"
+        :show-overflow-tooltip="true"
+      >
         <template slot-scope="scope">
           <!-- <input type="text" v-model="scope.row.checkedFather" /> -->
-          <el-rate
-            v-model="scope.row.score"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}"
-          >
-          </el-rate>
-          {{ scope.row.rato }}
+          <div class="my_ratoMain">
+            <el-rate
+              v-model="scope.row.score"
+              disabled
+              show-score
+              text-color="#ff9900"
+              score-template="{value}"
+            >
+            </el-rate>
+            <div class="my_rato">
+              {{ scope.row.rato }}
+            </div>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column prop="address6" label="服务评分"> </el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column
+        prop="address6"
+        label="服务评分"
+        min-width="140"
+        :show-overflow-tooltip="true"
+      >
+        <template slot-scope="scope">
+          <!-- <input type="text" v-model="scope.row.checkedFather" /> -->
+          <div class="my_ratoMain">
+            <el-rate
+              v-model="scope.row.myService_score"
+              disabled
+              show-score
+              text-color="#ff9900"
+              score-template="{value}"
+            >
+            </el-rate>
+            <div class="my_rato">
+              {{ scope.row.Service_rato }}
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否有图" min-width="76" prop="isImg">
+        <!-- <template slot-scope="scope">
+          <el-checkbox v-model="scope.row.isImg"></el-checkbox>
+        </template> -->
+      </el-table-column>
+      <el-table-column label="是否匿名" min-width="76" prop="isName">
+        <!-- <template slot-scope="scope">
+          <el-checkbox v-model="scope.row.isName"></el-checkbox>
+        </template> -->
+      </el-table-column>
+      <el-table-column fixed="right" min-width="90" label="操作">
         <template slot-scope="scope">
           <el-button @click="handleClick(scope.row)" type="text" size="small"
             >详情</el-button
@@ -72,26 +103,62 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       value: 3.7,
-      nameArr: [
-        {
-          name: {
-            name1: "用户ID",
-            name2: "用户昵称",
-            name3: "17500554456200",
-          },
-        },
-      ],
+      nameArr: [],
       commentList: [],
+      mySearch: "",
+      myPer_page: 10,
     };
+  },
+  computed: {
+    ...mapState([
+      "order_commentList_search",
+      "pageNum",
+      "per_page",
+      "orderSelect",
+      "endTime_commentList",
+      "startTime_commentList",
+    ]),
+  },
+  watch: {
+    "$store.state.order_commentList_search": function () {
+      this.mySearch = this.$store.state.order_commentList_search;
+      // console.log('xiugaile')
+      this.getData();
+    },
+    "$store.state.pageNum": function () {
+      this.myPageNum = this.$store.state.pageNum;
+      this.getData();
+      // setTimeout(() => {
+      //   this.select();
+      // }, 300);
+    },
+    "$store.state.per_page": function () {
+      // console.log(this.$store.state.pageNum)
+      this.myPer_page = this.$store.state.per_page;
+      this.getData();
+      // this.select();
+    },
+    "$store.state.orderSelect": function () {
+      this.myOrderSelect = this.$store.state.orderSelect;
+      this.getData();
+    },
+    "$store.state.endTime_commentList": function () {
+      this.getData();
+    },
+    "$store.state.startTime_commentList": function () {
+      console.log(1234444);
+      this.getData();
+    },
   },
   methods: {
     handleClick(row) {
       console.log(row);
-      this.$store.commit("changeDetails", row);
+      this.$store.commit("changeDetailsInfo", row);
       this.$store.commit("tolistDetailsFlag", true);
       this.$router.push({ name: "listDetails" });
     },
@@ -100,20 +167,38 @@ export default {
       // 删除后要把数据页删掉  ！！！
     },
     getData() {
-      this.$api.commentList().then((res) => {
-        console.log(res.data.data.data);
+      console.log(this.myPer_page)
+      const orderListObj = {
+        begin_time: this.startTime_commentList,
+        end_time: this.endTime_commentList,
+        keyword: this.mySearch,
+        limit: this.myPer_page,
+        page: this.myPageNum,
+      };
+      console.log(orderListObj);
+      this.$api.commentList(orderListObj).then((res) => {
+        console.log(res.data.data.total);
+        this.$store.commit("comment_total", res.data.data.total);
         this.commentList = res.data.data.data;
         this.commentList.forEach((ele) => {
           ele.comment_time = this.formatDate(new Date(ele.add_time * 1000));
-          ele.isImg = ele.is_pictures == 1 ? true : false;
-          ele.isName = ele.is_anonymous == 1 ? true : false;
+          ele.isImg = ele.is_pictures == 1 ? "√" : "×";
+          ele.isName = ele.is_anonymous == 1 ? "√" : "×";
           ele.score = Number(ele.goods_score);
+          ele.myService_score = Number(ele.service_score);
           if (ele.score <= 3) {
             ele.rato = "差评";
           } else if (ele.score <= 4) {
             ele.rato = "中评";
           } else if (ele.score <= 5) {
             ele.rato = "好评";
+          }
+          if (ele.myService_score <= 3) {
+            ele.Service_rato = "差评";
+          } else if (ele.myService_score <= 4) {
+            ele.Service_rato = "中评";
+          } else if (ele.myService_score <= 5) {
+            ele.Service_rato = "好评";
           }
           ele.user = `    <img class="ava"
       style="width: 50px; height: 50px"
@@ -146,6 +231,12 @@ export default {
     },
   },
   created() {
+    this.myPageNum = this.pageNum;
+    console.log(this.myPageNum);
+    // this.$store.commit("pageNum", this.myPageNum);
+    console.log(this.$store.state.pageNum);
+    this.$store.commit("per_page", 10);
+    console.log(this.myPer_page)
     this.getData();
   },
 };
@@ -160,5 +251,14 @@ export default {
 }
 .user {
   display: flex;
+}
+.my_ratoMain {
+  display: flex;
+  align-items: center;
+}
+
+.my_rato {
+  color: #ff9900;
+  transform: translate(10px, -1px);
 }
 </style>

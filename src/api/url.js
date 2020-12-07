@@ -23,4 +23,5 @@ export default {
     imageList:'/shop/goods/image/list',//获取商品相册列表
     imageChange:'/shop/goods/image/change',//添加&删除图片
     commentList:'/shop/order/comment/list',//评论列表
+    commentInfo:'/shop/order/comment/info',//评论详情
 }

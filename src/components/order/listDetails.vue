@@ -5,34 +5,70 @@
         <p>评价管理</p>
         <span @click="backTo">返回上一页</span>
       </div>
-      <div class="middle">
-        <!-- <p class="tit1">收货信息</p> -->
-        <div class="twoBox">
-          <div class="middle-left">
-            <p class="tit">商品评价：</p>
-            <p class="tit">服务评价：</p>
-            <p class="tit">订单号：</p>
-            <p class="tit">用户名：</p>
-            <p class="tit">商家名称：</p>
-            <p class="tit">评价内容：</p>
-            <p class="tit">评论时间：</p>
-            <p class="tit">评论图片：</p>
-          </div>
-          <div class="middle-right">
-            <p class="tit">{{ twoarr[0].a }}</p>
-            <p class="tit">{{ twoarr[0].b }}</p>
-            <p class="tit">{{ twoarr[0].c }}</p>
-            <p class="tit">{{ twoarr[0].d }}</p>
-            <p class="tit">{{ twoarr[0].e }}</p>
-            <p class="tit">{{ twoarr[0].f }}</p>
-            <p class="tit">{{ twoarr[0].g }}</p>
-            <p>
-              <el-image
-                :src="twoarr[0].url"
-                style="width: 100px; height: 100px"
-              ></el-image>
-            </p>
-          </div>
+      <div class="content">
+        <div class="flex_content">
+          <span>商品评价：</span>
+          <p class="tit">
+            <el-rate
+              v-model="my_commentInfo.my_goods_score"
+              disabled
+              show-score
+              text-color="#ff9900"
+              score-template="{value}"
+            >
+            </el-rate>
+            <span class="my_rato">{{ my_commentInfo.rato }}</span>
+          </p>
+        </div>
+        <div class="flex_content">
+          <span>服务评价：</span>
+          <p class="tit">
+            <el-rate
+              v-model="my_commentInfo.my_service_score"
+              disabled
+              show-score
+              text-color="#ff9900"
+              score-template="{value}"
+            >
+            </el-rate>
+            <span class="my_rato">{{ my_commentInfo.Service_rato }}</span>
+          </p>
+        </div>
+        <div class="flex_content">
+          <span>订单号：</span>
+          <p class="tit">{{ my_commentInfo.item_id }}</p>
+        </div>
+        <div class="flex_content">
+          <span>用户名：</span>
+          <p class="tit">{{ my_commentInfo.user.nick_name }}</p>
+        </div>
+        <div class="flex_content">
+          <span>评价内容：</span>
+          <p class="tit">{{ my_commentInfo.content }}</p>
+        </div>
+        <div class="flex_content">
+          <span>评论时间：</span>
+          <p class="tit">{{ my_commentInfo.comment_time }}</p>
+        </div>
+        <div class="flex_content">
+          <span>评论图片：</span>
+          <p class="tit" v-if="my_commentInfo.comment_images.length > 0">
+            <viewer>
+              <img
+                v-for="(ele, index) in my_commentInfo.comment_images"
+                :key="index"
+                :src="ele.img_url"
+                style="width: 100px; height: 100px; cursor: pointer"
+              />
+            </viewer>
+          </p>
+          <p class="tit" v-else-if="my_commentInfo.comment_images.length == 0">
+            <el-image style="width: 100px; height: 100px; cursor: pointer">
+              <!-- <div slot="error" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div> -->
+            </el-image>
+          </p>
         </div>
       </div>
     </div>
@@ -43,28 +79,80 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      twoarr: [
-        {
-          a: "4",
-          b: "4",
-          c: "330300000330XXXXXX",
-          d: "330300000330XXXXXX",
-          e: "330300000330XXXXXX",
-          f: "330300000330XXXXXX",
-          g: "2020/10/20 09:00:00",
-          h:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        },
-      ],
+      my_commentInfo: null,
     };
   },
   computed: {
-    ...mapState(["details"]),
+    ...mapState(["detailsInfo"]),
   },
   created() {
-    console.log(this.details);
+    this.getData();
+  },
+  mounted() {
+    // let imgError = document.getElementsByClassName('el-image__error')[0]
+    // console.log(imgError)
   },
   methods: {
+    getData() {
+      this.$api
+        .commentInfo(this.detailsInfo.comment_id)
+        .then((res) => {
+          console.log(res.data.data);
+          this.my_commentInfo = res.data.data;
+          this.my_commentInfo.comment_time = this.formatDate(
+            new Date(this.my_commentInfo.add_time * 1000)
+          );
+          this.my_commentInfo.my_goods_score = Number(
+            this.my_commentInfo.goods_score
+          );
+          this.my_commentInfo.my_service_score = Number(
+            this.my_commentInfo.service_score
+          );
+          if (this.my_commentInfo.my_goods_score <= 3) {
+            this.my_commentInfo.rato = "差评";
+          } else if (this.my_commentInfo.my_goods_score <= 4) {
+            this.my_commentInfo.rato = "中评";
+          } else if (this.my_commentInfo.my_goods_score <= 5) {
+            this.my_commentInfo.rato = "好评";
+          }
+          if (this.my_commentInfo.my_service_score <= 3) {
+            this.my_commentInfo.Service_rato = "差评";
+          } else if (this.my_commentInfo.my_service_score <= 4) {
+            this.my_commentInfo.Service_rato = "中评";
+          } else if (this.my_commentInfo.my_service_score <= 5) {
+            this.my_commentInfo.Service_rato = "好评";
+          }
+        })
+        .then(() => {
+          setTimeout(() => {
+            let imgError = document.getElementsByClassName(
+              "el-image__error"
+            )[0];
+            imgError.innerText = "暂无图片";
+          }, 100);
+        });
+    },
+    formatDate(now) {
+      var year = now.getFullYear(); //取得4位数的年份
+      var month = now.getMonth() + 1; //取得日期中的月份，其中0表示1月，11表示12月
+      var date = now.getDate(); //返回日期月份中的天数（1到31）
+      var hour = now.getHours(); //返回日期中的小时数（0到23）
+      var minute = now.getMinutes(); //返回日期中的分钟数（0到59）
+      var second = now.getSeconds(); //返回日期中的秒数（0到59）
+      return (
+        year +
+        "-" +
+        month +
+        "-" +
+        date +
+        " " +
+        hour +
+        ":" +
+        minute +
+        ":" +
+        second
+      );
+    },
     backTo() {
       this.$router.push({ name: "commentList" });
     },
@@ -74,49 +162,22 @@ export default {
 <style scoped>
 .listDetails {
   min-height: 100%;
-  /* height: 100%; */
   width: 100%;
   box-sizing: border-box;
 }
-.listDetails .el-tabs--border-card {
-  min-height: 100%;
+.flex_content {
+  display: flex;
 }
-.el-tabs {
-  height: 100%;
-  width: 100%;
+.tit {
+  display: flex;
+  align-items: center;
 }
-.el-tabs__content {
-  padding: 0px !important;
-  /* height: calc(100% - 41px); */
-  height: auto;
-  overflow: hidden;
-  position: relative;
-  clear: both;
-}
-.el-tabs--border-card > .el-tabs__header {
-  height: 40px;
-}
-.el-tabs--border-card {
-  border: 0px;
-  width: 100%;
-}
-
-.listDetails .el-tab-pane {
-  /* height: 1000px; */
-  /* display: flex; */
-  margin-left: 100px;
-  justify-content: center;
+.my_rato {
+  color: #ff9900;
+  transform: translate(10px, -1px);
 }
 .details {
-  /* height: 500px; */
   width: 900px;
-  /* position: absolute; */
-  /* left: 50%; */
-  /* transform: translateX(-50%); */
-  /* padding-top: 70px; */
-  /* border: 1px solid red; */
-  /* overflow: scroll; */
-  /* margin-left: 60px; */
   margin: 26px 0 100px 60px;
 }
 .details .title {
@@ -137,148 +198,5 @@ export default {
   margin-top: 18px;
   cursor: pointer;
   height: 23px;
-}
-
-.details .middle {
-  width: 100%;
-  height: 236px;
-  /* border: 1px solid blue; */
-}
-.details .middle .twoBox {
-  display: flex;
-}
-.details .middle p.tit1 {
-  font-size: 26px;
-  margin-right: 54px;
-}
-.details .middle .twoBox .middle-left {
-  width: 150px;
-  height: 400px;
-  padding: 26px 0;
-  /* border-bottom: 1px solid #bbbbbb; */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-.details .middle .twoBox .middle-right {
-  width: calc(900px - 150px);
-  height: 485px;
-  padding: 26px 0;
-  /* border-bottom: 1px solid #bbbbbb; */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.details .bottom {
-  width: 100%;
-  /* height: 500px; */
-  /* border: 1px solid palevioletred; */
-  /* padding-top: 38px; */
-}
-.details .bottom p.tit1 {
-  font-size: 26px;
-  margin-right: 54px;
-  padding: 38px 0;
-  width: 100%;
-  /* border: 1px solid greenyellow; */
-}
-
-.details table {
-  width: 100%;
-  text-align: center;
-  border-spacing: 0;
-  border-collapse: collapse;
-}
-.details table .top {
-  background-color: #e8e8e8;
-  color: #000;
-}
-.details table .bottom {
-  background-color: #fff;
-}
-.details table .bottom td {
-  border: 1px solid;
-  /* background-color: rgba(245, 247, 250, 0.8); */
-}
-.details table {
-  font-size: 14px;
-  /* height: 36px; */
-  line-height: 20px;
-}
-.details table .bottom tr {
-  height: 40px;
-}
-.details table .bottom tr td {
-  padding: 5px;
-}
-.details table .top tr {
-  height: 40px;
-}
-.details table .top th {
-  border: 1px solid #000;
-}
-.details table .top .no1 {
-  width: 25%;
-}
-.details table .top .no2 {
-  width: 25%;
-}
-.details table .top .no3 {
-  width: 25%;
-}
-.details table .top .no4 {
-  width: 25%;
-}
-
-.details .footer {
-  margin-top: 50px;
-  width: 100%;
-  /* height: 236px; */
-  border-bottom: 1px solid #bbbbbb;
-}
-.details .footer .twoBox {
-  display: flex;
-}
-
-.details .footer .twoBox .footer-one,
-.details .footer .twoBox .footer-two,
-.details .footer .twoBox .footer-three,
-.details .footer .twoBox .footer-four {
-  height: 350px;
-  padding: 26px 0;
-  /* border-bottom: 1px solid #bbbbbb; */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.details .footer .twoBox .footer-one {
-  width: 150px;
-}
-
-.details .footer .twoBox .footer-three {
-  padding-left: 120px;
-  height: 150px;
-  width: 150px;
-}
-.details .footer .twoBox .footer-four {
-  height: 150px;
-}
-.details .footer .twoBox .active {
-  color: #5394ff;
-}
-
-.details .below {
-  display: flex;
-  margin-top: 32px;
-}
-.details .below .below-one,
-.details .below .below-two {
-  height: 100px;
-  width: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
 }
 </style>

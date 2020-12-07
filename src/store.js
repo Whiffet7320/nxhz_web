@@ -35,15 +35,22 @@ export default new Vuex.Store({
     isDotNum: '',//websocket中的isDot
     startTime:null,//根据时间筛选（订单页） 开始
     endTime:null,//结束时间
+    startTime_commentList:null,//根据时间筛选（评论页） 开始
+    endTime_commentList:null,//结束时间
     examine_Verify:null,//examine的verify_state（审核）
     mobile:null,//账号名
     passWord:null,//账号密码
     sayObj:null,//say过来后的数据
     toEditFlag:false,//渲染sell还是edit
     todetailsFlag:false,
-    tolistDetailsFlag:false
+    tolistDetailsFlag:false,
+    detailsInfo:{},
+    comment_total:null,
   },
   mutations: {
+    comment_total(state, num) {
+      state.comment_total = num;
+    },
     toEditFlag(state, boolean) {
       state.toEditFlag = boolean;
     },
@@ -82,6 +89,9 @@ export default new Vuex.Store({
     },
     changeDetails(state, details) {
       state.details = details
+    },
+    changeDetailsInfo(state, details) {
+      state.detailsInfo = details
     },
     breadListMutations(state, list) {
       state.breadListState = list;
@@ -140,11 +150,20 @@ export default new Vuex.Store({
     endTime(state, num) {//根据时间筛选（订单页）结束
       state.endTime = num;
     },
+    startTime_commentList(state, num) {//根据时间筛选（评论页）开始
+      state.startTime_commentList = num;
+    },
+    endTime_commentList(state, num) {//根据时间筛选（评论页）结束
+      state.endTime_commentList = num;
+    },
     examine_Verify(state, num) {
       state.examine_Verify = num;
     },
     order_testContent_search(state, str){
       state.order_testContent_search = str;
+    },
+    order_commentList_search(state, str){
+      state.order_commentList_search = str;
     },
     order_total(state, num) {//总数据
       state.order_total = num;

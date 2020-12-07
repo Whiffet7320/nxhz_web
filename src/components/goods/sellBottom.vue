@@ -44,16 +44,31 @@
                     <el-input
                       size="small"
                       v-model="scope.row.storage"
+                      @keyup.enter.native="skuEditEnter(scope)"
+                      @focus="skuEditFocus(scope)"
                     ></el-input>
                   </div>
                 </template>
               </el-table-column>
               <el-table-column prop="myVerify" label="审核状态">
               </el-table-column>
-              <el-table-column width="200" label="是否上架">
+              <el-table-column label="是否上架">
                 <template slot-scope="scope">
                   <!-- <input type="text" v-model="scope.row.checkedFather" /> -->
                   <el-checkbox v-model="scope.row.checkedFather"></el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column prop="sort" label="排序">
+                <template scope="scope">
+                  <div class="input-box">
+                    <!-- @blur="handleInputBlur" -->
+                    <el-input
+                      size="small"
+                      v-model="scope.row.sort"
+                      @keyup.enter.native="skuEditEnter(scope)"
+                      @focus="skuEditFocus(scope)"
+                    ></el-input>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column fixed="right" label="操作" width="150">
@@ -93,10 +108,23 @@
       <el-table-column prop="address3" label="销售价"> </el-table-column>
       <el-table-column prop="address3" label="库存"> </el-table-column>
       <el-table-column prop="myVerify" label="审核状态"> </el-table-column>
-      <el-table-column width="200" label="是否上架">
+      <el-table-column label="是否上架">
         <template slot-scope="scope">
           <!-- <input type="text" v-model="scope.row.checkedFather" /> -->
           <el-checkbox v-model="scope.row.checkedFather"></el-checkbox>
+        </template>
+      </el-table-column>
+      <el-table-column prop="sort" label="排序">
+        <template scope="scope">
+          <div class="input-box">
+            <!-- @blur="handleInputBlur" -->
+            <el-input
+              size="small"
+              v-model="scope.row.sort"
+              @keyup.enter.native="EditEnter(scope)"
+              @focus="EditFocus(scope)"
+            ></el-input>
+          </div>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150">
@@ -133,6 +161,11 @@ export default {
       limit: null,
       myVerify: null,
       mySys_on_sale: null,
+      sku_storage: null,
+      sku_sort: null,
+      my_storage: null,
+      my_sort: null,
+      skuFlag: true,
     };
   },
   computed: {
@@ -190,6 +223,79 @@ export default {
         .then(() => {
           this.getData();
         });
+    },
+    skuEditEnter(scope) {
+      console.log(scope.row);
+      console.log((Number(scope.row.storage) - this.sku_storage).toString());
+      let newStorage = (
+        Number(scope.row.storage) - this.sku_storage
+      ).toString();
+      let myNewStorage = null;
+      if (newStorage > 0) {
+        myNewStorage = `+${newStorage}`;
+      } else {
+        myNewStorage = newStorage;
+      }
+      console.log(myNewStorage);
+      const storageObj = {
+        sku_id: scope.row.sku_id,
+        storage: myNewStorage,
+        sort: scope.row.sort,
+      };
+      console.log(storageObj);
+      this.$api
+        .skuChange(storageObj)
+        .then((res) => {
+          console.log(res);
+        })
+        .then(() => {
+          this.$message({
+            message: "修改成功",
+            type: "success",
+          });
+        })
+        .then(() => {
+          this.skuFlag = true;
+          this.getData();
+        });
+    },
+    skuEditFocus(scope) {
+      console.log(scope.row.storage, scope.row.sort);
+      if (this.skuFlag) {
+        this.skuFlag = false;
+        this.sku_storage = scope.row.storage;
+        this.sku_sort = scope.row.sort;
+      }
+    },
+    EditEnter(scope) {
+      console.log(scope.row);
+      const storageObj = {
+        goods_name: scope.row.goods_name,
+        goods_id: scope.row.goods_id,
+        sort: scope.row.sort,
+        cat1_id: scope.row.cat1_id,
+        cat2_id: scope.row.cat2_id,
+        cat3_id: scope.row.cat3_id,
+        goods_img: scope.row.goods_img,
+      };
+      console.log(storageObj);
+      this.$api.goodsEdit(storageObj).then((res) => {
+        if (res.data.status == 1) {
+          console.log(res.data);
+          this.$message({
+            message: "保存成功",
+            type: "success",
+          });
+        } else {
+          this.$message.error(res.data.info);
+        }
+      }).then(()=>{
+        this.getData();
+      })
+    },
+    EditFocus(scope) {
+      console.log(scope.row, scope.row.sort);
+      this.my_sort = scope.row.sort;
     },
     deleteRow(row) {
       //删除
@@ -466,5 +572,8 @@ export default {
 .el-tooltip__popper.is-dark {
   background: #f5f5f5 !important;
   color: #303133 !important;
+}
+.right-content form label {
+  text-align: left;
 }
 </style>

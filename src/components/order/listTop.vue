@@ -1,7 +1,7 @@
 <template>
   <div class="contentTop">
     <div class="left">
-      <span>评价管理</span>
+      <span>订单列表</span>
     </div>
     <div class="right">
       <el-form
@@ -12,17 +12,7 @@
         :inline="true"
       >
         <!-- <div class="inline-box"> -->
-        <!-- <el-form-item label="订单状态:" prop="region" class="region">
-          <el-select v-model="ruleForm.region" placeholder="订单状态">
-            <el-option label="待付款" value="fu"></el-option>
-            <el-option label="待发货" value="fa"></el-option>
-            <el-option label="待收货" value="shou"></el-option>
-            <el-option label="待评价" value="ping"></el-option>
-            <el-option label="交易完成" value="wancheng"></el-option>
-            <el-option label="交易关闭" value="guanbi"></el-option>
-          </el-select>
-        </el-form-item> -->
-        <el-form-item label="活动时间" required class="time">
+        <el-form-item label="下单时间" class="time">
           <el-col :span="12">
             <el-form-item prop="date1">
               <el-date-picker
@@ -30,17 +20,20 @@
                 placeholder="选择日期"
                 v-model="ruleForm.date1"
                 style="width: 100%"
+                @change="timeChange()"
               ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col class="line" :span="1">-</el-col>
-          <el-col :span="10">
+          <el-col :span="11">
             <el-form-item prop="date2">
-              <el-time-picker
-                placeholder="选择时间"
+              <el-date-picker
+                type="date"
+                placeholder="选择日期"
                 v-model="ruleForm.date2"
                 style="width: 100%"
-              ></el-time-picker>
+                @change="timeChange()"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
         </el-form-item>
@@ -63,31 +56,17 @@
             placeholder="用户手机号/订单号"
           ></el-input>
         </div>
-        <!-- <div class="time">
-          <div class="block">
-            <span class="spanLeft">默认</span>
-            <el-date-picker v-model="value1" type="date" placeholder="选择日期">
-            </el-date-picker>
-          </div>
-          <div class="block">
-            <span>-</span>
-            <el-date-picker
-              v-model="value2"
-              align="right"
-              type="date"
-              placeholder="选择日期"
-            >
-            </el-date-picker>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
+      mystartTime: null,
+      myendTime: null,
       ruleForm: {
         name: "",
         region: "",
@@ -99,19 +78,73 @@ export default {
         desc: "",
       },
       phoneInput: "",
-      value1: "",
-      value2: "",
     };
   },
+  computed: {
+    ...mapState(["order_commentList_search", "startTime_commentList", "endTime_commentList"]),
+  },
+  created() {
+    this.phoneInput = this.order_commentList_search;
+    console.log(this.startTime_commentList,this.endTime_commentList)
+    if (this.startTime_commentList && this.endTime_commentList) {
+      this.ruleForm.date1 = this.startTime_commentList;
+      this.ruleForm.date2 = this.endTime_commentList;
+      this.timeChange()
+    }
+  },
   methods: {
+    formatDate(now) {
+      var year = now.getFullYear(); //取得4位数的年份
+      var month = now.getMonth() + 1; //取得日期中的月份，其中0表示1月，11表示12月
+      var date = now.getDate(); //返回日期月份中的天数（1到31）
+      var hour = now.getHours(); //返回日期中的小时数（0到23）
+      var minute = now.getMinutes(); //返回日期中的分钟数（0到59）
+      var second = now.getSeconds(); //返回日期中的秒数（0到59）
+      return (
+        year +
+        "-" +
+        month +
+        "-" +
+        date +
+        " " +
+        hour +
+        ":" +
+        minute +
+        ":" +
+        second
+      );
+    },
+    timeChange() {
+      console.log(this.ruleForm.date1, this.ruleForm.date2);
+      console.log(
+        Date.parse(this.ruleForm.date1),
+        "__",
+        Date.parse(this.ruleForm.date2)
+      );
+      this.mystartTime = this.formatDate(
+        new Date(Date.parse(this.ruleForm.date1))
+      );
+      this.myendTime = this.formatDate(
+        new Date(Date.parse(this.ruleForm.date2))
+      );
+    },
     onSubmit() {
-      console.log("submit!");
+      console.log("submit!", this.ruleForm.region);
+      this.$store.commit("order_commentList_search", this.phoneInput);
+      this.$store.commit("orderSelect", this.ruleForm.region);
+      this.$store.commit("startTime_commentList", this.mystartTime);
+      this.$store.commit("endTime_commentList", this.myendTime);
+      this.$store.commit("pageNum", 1);
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.phoneInput = "";
-      this.value1 = "";
-      this.value2 = "";
+      this.ruleForm.date1 = "";
+      this.ruleForm.date2 = "";
+      this.mystartTime = "";
+      this.myendTime = "";
+      this.$store.commit("pageNum", 1);
+      this.onSubmit();
     },
   },
 };
@@ -136,41 +169,41 @@ export default {
   margin-top: 30px;
   margin-left: 30px;
 }
-.contentTop .right .el-form .region .el-form-item__content{
+.contentTop .right .el-form .region .el-form-item__content {
   width: 178px;
 }
-.contentTop .right .el-form .time .el-form-item__content .el-form-item{
+.contentTop .right .el-form .time .el-form-item__content .el-form-item {
   width: 182px;
 }
-.contentTop .right .el-form .contentTop-btn{
+.contentTop .right .el-form .contentTop-btn {
   margin-left: 20px;
 }
-.contentTop .right .phoneTime{
+.contentTop .right .phoneTime {
   display: flex;
 }
-.contentTop .right .phoneTime .time{
+.contentTop .right .phoneTime .time {
   display: flex;
   /* margin-left: 14px; */
 }
-.contentTop .right .phoneTime .time .block{
+.contentTop .right .phoneTime .time .block {
   display: flex;
   align-items: center;
   margin-right: 10px;
 }
-.contentTop .right .phoneTime .time .block .spanLeft{
+.contentTop .right .phoneTime .time .block .spanLeft {
   font-size: 14px;
-    color: #606266;
-    margin-right: 28px;
-    display: block;
-    width: 30px;
+  color: #606266;
+  margin-right: 28px;
+  display: block;
+  width: 30px;
 }
-.contentTop .right .phoneTime .time .block span{
+.contentTop .right .phoneTime .time .block span {
   font-size: 14px;
-    color: #606266;
-    display: block;
-    width: 30px;
+  color: #606266;
+  display: block;
+  width: 30px;
 }
-.contentTop .right .phoneTime .time .block .el-date-editor{
+.contentTop .right .phoneTime .time .block .el-date-editor {
   width: 140px;
 }
 .contentTop .right .phone {

@@ -1,7 +1,8 @@
 import axios from 'axios';
+import Vue from 'vue'
 import router from '../router.js';
 import urls from './url.js';
-
+const vue = new Vue()
 let myPost = axios.create({
     baseURL: urls.baseUrl,
     method: 'post',
@@ -114,6 +115,10 @@ myGet.interceptors.request.use(config => {
 })
 myPost.interceptors.response.use(response => {
     if (response.status === 200) {
+        vue.$message({
+            message: response.data.info,
+            type: "success",
+        });
         return response;
     } else {
         Promise.reject();
@@ -121,7 +126,8 @@ myPost.interceptors.response.use(response => {
 }, error => {
     //错误跳转
     if (error.response.status === 500) {
-        console.log(error.response.data.info)
+        console.log(vue)
+        vue.$message.error(error.response.data.info);
     } else if (error.response.status === 401) {
         sessionStorage.setItem("isLogin", false);
         console.log(sessionStorage.getItem("isLogin"));
@@ -132,6 +138,10 @@ myPost.interceptors.response.use(response => {
 })
 myGet.interceptors.response.use(response => {
     if (response.status === 200) {
+        // vue.$message({
+        //     message: response.data.info,
+        //     type: "success",
+        // });
         return response;
     } else {
         Promise.reject();
@@ -139,7 +149,8 @@ myGet.interceptors.response.use(response => {
 }, error => {
     //错误跳转
     if (error.response.status === 500) {
-        console.log(error.response.data.info)
+        // console.log()
+        vue.$message.error(error.response.data.info);
     } else if (error.response.status === 401) {
         sessionStorage.setItem("isLogin", false);
         console.log(sessionStorage.getItem("isLogin"));
@@ -430,6 +441,14 @@ export default {
             url: urls.commentList,
             params: {
                 ...obj
+            },
+        })
+    },
+    commentInfo(comment_id) {//评论详情
+        return myGet({
+            url: urls.commentInfo,
+            params: {
+                comment_id,
             },
         })
     },
