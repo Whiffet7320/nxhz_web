@@ -662,12 +662,12 @@ export default {
         .then((res) => {
           if (res.data.status == 1) {
             console.log(res.data);
-            this.$message({
-              message: "保存成功",
-              type: "success",
-            });
+            // this.$message({
+            //   message: "保存成功",
+            //   type: "success",
+            // });
           } else {
-            this.$message.error(res.data.info);
+            // this.$message.error(res.data.info);
           }
         })
         .then(() => {

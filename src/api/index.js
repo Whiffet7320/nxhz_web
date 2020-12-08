@@ -115,10 +115,15 @@ myGet.interceptors.request.use(config => {
 })
 myPost.interceptors.response.use(response => {
     if (response.status === 200) {
-        vue.$message({
-            message: response.data.info,
-            type: "success",
-        });
+        console.log(response.data.info == '' || response.data.info == "ok")
+        if (response.data.info == '' || response.data.info == "ok") {
+            return response;
+        } else {
+            vue.$message({
+                message: response.data.info,
+                type: "success",
+            });
+        }
         return response;
     } else {
         Promise.reject();

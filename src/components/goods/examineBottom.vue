@@ -34,6 +34,7 @@
 
               <el-table-column prop="verify_state" label="审核状态">
               </el-table-column>
+               <el-table-column prop="mySys_on_sale" label="上架状态"> </el-table-column>
               <el-table-column fixed="right" label="操作" width="200">
               </el-table-column>
             </el-table>

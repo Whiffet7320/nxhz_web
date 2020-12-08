@@ -143,9 +143,9 @@ function initWebSocket() {
         } else if (resData.type == "init") {
           console.log(resData.client_id)
           store.commit('client_id', resData.client_id)
-          _this.$api.bindShop(resData.client_id).then((res) => {
+          _this.$api.bindShop(resData.client_id).then(() => {
             //绑定client_id到shop_id
-            console.log(res.data.info);
+            // console.log(res.data.info);
           });
         }
         if (_this.getLeftUserList) {

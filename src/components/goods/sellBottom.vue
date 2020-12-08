@@ -215,10 +215,10 @@ export default {
           console.log(res);
         })
         .then(() => {
-          this.$message({
-            message: "删除成功",
-            type: "success",
-          });
+          // this.$message({
+          //   message: "删除成功",
+          //   type: "success",
+          // });
         })
         .then(() => {
           this.getData();
@@ -248,12 +248,12 @@ export default {
         .then((res) => {
           console.log(res);
         })
-        .then(() => {
-          this.$message({
-            message: "修改成功",
-            type: "success",
-          });
-        })
+        // .then(() => {
+        //   this.$message({
+        //     message: "修改成功",
+        //     type: "success",
+        //   });
+        // })
         .then(() => {
           this.skuFlag = true;
           this.getData();
@@ -282,12 +282,12 @@ export default {
       this.$api.goodsEdit(storageObj).then((res) => {
         if (res.data.status == 1) {
           console.log(res.data);
-          this.$message({
-            message: "保存成功",
-            type: "success",
-          });
+          // this.$message({
+          //   message: "保存成功",
+          //   type: "success",
+          // });
         } else {
-          this.$message.error(res.data.info);
+          // this.$message.error(res.data.info);
         }
       }).then(()=>{
         this.getData();
@@ -308,10 +308,10 @@ export default {
       this.$api.goodsChange(deleteObj).then((res) => {
         console.log(res);
         if (res.data.status == 1) {
-          this.$message({
-            message: "删除成功",
-            type: "success",
-          });
+          // this.$message({
+          //   message: "删除成功",
+          //   type: "success",
+          // });
         }
         this.getData();
       });

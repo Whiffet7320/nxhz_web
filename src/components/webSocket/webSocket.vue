@@ -271,7 +271,6 @@ export default {
     this.$api.bindShop(this.client_id).then((res) => {
       //绑定client_id到shop_id
       console.log(res);
-      console.log(res.data.info);
       this.getLeftUserList();
     });
     // this.getLeftUserList();
