@@ -34,11 +34,11 @@
             <span class="my_rato">{{ my_commentInfo.Service_rato }}</span>
           </p>
         </div>
-        <div class="flex_content">
+        <div class="flex_content three">
           <span>订单号：</span>
           <p class="tit">{{ my_commentInfo.item_id }}</p>
         </div>
-        <div class="flex_content">
+        <div class="flex_content three">
           <span>用户名：</span>
           <p class="tit">{{ my_commentInfo.user.nick_name }}</p>
         </div>
@@ -94,43 +94,47 @@ export default {
   },
   methods: {
     getData() {
-      this.$api
-        .commentInfo(this.detailsInfo.comment_id)
-        .then((res) => {
-          console.log(res.data.data);
-          this.my_commentInfo = res.data.data;
-          this.my_commentInfo.comment_time = this.formatDate(
-            new Date(this.my_commentInfo.add_time * 1000)
-          );
-          this.my_commentInfo.my_goods_score = Number(
-            this.my_commentInfo.goods_score
-          );
-          this.my_commentInfo.my_service_score = Number(
-            this.my_commentInfo.service_score
-          );
-          if (this.my_commentInfo.my_goods_score <= 3) {
-            this.my_commentInfo.rato = "差评";
-          } else if (this.my_commentInfo.my_goods_score <= 4) {
-            this.my_commentInfo.rato = "中评";
-          } else if (this.my_commentInfo.my_goods_score <= 5) {
-            this.my_commentInfo.rato = "好评";
-          }
-          if (this.my_commentInfo.my_service_score <= 3) {
-            this.my_commentInfo.Service_rato = "差评";
-          } else if (this.my_commentInfo.my_service_score <= 4) {
-            this.my_commentInfo.Service_rato = "中评";
-          } else if (this.my_commentInfo.my_service_score <= 5) {
-            this.my_commentInfo.Service_rato = "好评";
-          }
-        })
-        .then(() => {
-          setTimeout(() => {
-            let imgError = document.getElementsByClassName(
-              "el-image__error"
-            )[0];
-            imgError.innerText = "暂无图片";
-          }, 100);
-        });
+      if (this.detailsInfo.comment_id) {
+        this.$api
+          .commentInfo(this.detailsInfo.comment_id)
+          .then((res) => {
+            console.log(res.data.data);
+            this.my_commentInfo = res.data.data;
+            this.my_commentInfo.comment_time = this.formatDate(
+              new Date(this.my_commentInfo.add_time * 1000)
+            );
+            this.my_commentInfo.my_goods_score = Number(
+              this.my_commentInfo.goods_score
+            );
+            this.my_commentInfo.my_service_score = Number(
+              this.my_commentInfo.service_score
+            );
+            if (this.my_commentInfo.my_goods_score <= 3) {
+              this.my_commentInfo.rato = "差评";
+            } else if (this.my_commentInfo.my_goods_score <= 4) {
+              this.my_commentInfo.rato = "中评";
+            } else if (this.my_commentInfo.my_goods_score <= 5) {
+              this.my_commentInfo.rato = "好评";
+            }
+            if (this.my_commentInfo.my_service_score <= 3) {
+              this.my_commentInfo.Service_rato = "差评";
+            } else if (this.my_commentInfo.my_service_score <= 4) {
+              this.my_commentInfo.Service_rato = "中评";
+            } else if (this.my_commentInfo.my_service_score <= 5) {
+              this.my_commentInfo.Service_rato = "好评";
+            }
+          })
+          .then(() => {
+            setTimeout(() => {
+              let imgError = document.getElementsByClassName(
+                "el-image__error"
+              )[0];
+              imgError.innerText = "暂无图片";
+            }, 100);
+          });
+      }else{
+        this.$router.push({name:'commentList'})
+      }
     },
     formatDate(now) {
       var year = now.getFullYear(); //取得4位数的年份
@@ -198,5 +202,19 @@ export default {
   margin-top: 18px;
   cursor: pointer;
   height: 23px;
+}
+.content .flex_content {
+  margin-top: 26px;
+}
+.content .flex_content.three {
+  margin-top: 26px;
+  margin-left: 16px;
+}
+.content .flex_content .tit {
+  margin-left: 10px;
+  transform: translateY(1px);
+}
+.content .flex_content .tit img {
+  margin-right: 8px;
 }
 </style>

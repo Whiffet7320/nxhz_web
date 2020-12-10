@@ -7,17 +7,21 @@
       </div>
       <div class="content">
         <p>优惠券名称：</p>
-        <el-select v-model="value" placeholder="优惠券1">
+        <el-select
+          v-model="value"
+          placeholder="请选择优惠券"
+          @change="optionGrant"
+        >
           <el-option
             v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.coupon_name"
+            :value="item.id"
           >
           </el-option>
         </el-select>
       </div>
-      <div class="bottom">
+      <!-- <div class="bottom">
         <p>发放用户：</p>
         <el-checkbox-group v-model="checkList">
           <el-checkbox label="用户 A"></el-checkbox>
@@ -26,53 +30,221 @@
           <el-checkbox label="禁用" disabled></el-checkbox>
           <el-checkbox label="选中且禁用" disabled></el-checkbox>
         </el-checkbox-group>
-      </div>
+      </div> -->
+
+      <el-dialog title="选择用户" :visible.sync="dialogFormVisible">
+        <el-table :data="myTableData" style="width: 100%">
+          <!-- <el-table-column prop="date" label="ID"> </el-table-column> -->
+          <el-table-column label="选择用户">
+            <template slot-scope="scope">
+              <!-- <input type="text" v-model="scope.row.checkedFather" /> -->
+              <el-checkbox
+                v-model="scope.row.checkedFather"
+                @change="check(scope)"
+              ></el-checkbox>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="user_id"
+            label="用户ID"
+            min-width="100"
+            :show-overflow-tooltip="true"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="head_pic"
+            label="用户头像"
+            min-width="90"
+            :show-overflow-tooltip="true"
+          >
+            <template slot-scope="scope">
+              <img
+                :src="scope.row.head_pic"
+                alt=""
+                style="width: 50px; height: 50px"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="nick_name"
+            label="用户名称"
+            min-width="90"
+            :show-overflow-tooltip="true"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="mobile"
+            label="用户电话"
+            min-width="90"
+            :show-overflow-tooltip="true"
+          >
+          </el-table-column>
+        </el-table>
+        <!-- 分页 -->
+        <div class="flex">
+          <div class="page">
+            <div class="block">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :page-size="10"
+                layout="total, prev, pager, next, jumper"
+                :total="this.myTotal"
+                :current-page="toGrant_good_pageNum"
+                ref="page"
+              >
+              </el-pagination>
+            </div>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="my_submit">确 定</el-button>
+          </div>
+        </div>
+      </el-dialog>
+      <!--  -->
+      <el-button @click="selectUser">选择用户</el-button>
+      <div v-if="myuser_idArr.length > 0">{{ myuser_idArr }}</div>
       <div class="btn">
-        <el-button type="primary">保存</el-button>
+        <el-button type="primary" @click="couponSend_btn">发放</el-button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
+      myTableData: [],
       checkList: ["用户 A", "选中且禁用"], //选中的复选框
-      options: [
-        {
-          value: "选项1",
-          label: "优惠券1",
-        },
-        {
-          value: "选项2",
-          label: "优惠券2",
-        },
-        {
-          value: "选项3",
-          label: "优惠券3",
-        },
-        {
-          value: "选项4",
-          label: "优惠券4",
-        },
-        {
-          value: "选项5",
-          label: "优惠券5",
-        },
-      ],
+      options: [],
       value: "",
+      dialogFormVisible: false,
+      myTotal: null,
+      user_idArr: [],
+      myuser_idArr: [],
+      coupon_id: null,
     };
   },
-  methods:{
-    backTo(){
-      this.$router.push({name:"testContent2"})
-    }
-  }
+  computed: {
+    ...mapState(["toGrant_good_pageNum"]),
+  },
+  watch: {
+    "$store.state.total": function () {
+      this.getTotal();
+    },
+    "$store.state.toGrant_good_pageNum": function () {
+      this.myPageNum = this.$store.state.toGrant_good_pageNum;
+      if (this.$store.state.toGrant_good_pageNum == 1) {
+        this.$refs.page.$children[2].$el.children[0].click();
+      }
+      this.getdata();
+    },
+    "$store.state.per_page": function () {
+      // console.log(this.$store.state.pageNum)
+      // this.myPageNum = this.$store.state.per_page;
+      this.getdata();
+      // this.select();
+    },
+  },
+  methods: {
+    optionGrant(val) {
+      console.log(val);
+      this.coupon_id = val;
+    },
+    couponSend_btn() {
+      const couponSendObj = {
+        coupon_id: this.coupon_id,
+        user_id: this.user_idArr,
+      };
+      this.$api.couponSend(couponSendObj).then((res) => {
+        console.log(res);
+        if (res.data.status === 1) {
+          this.$router.push({ name: "operatetest" });
+        }
+      });
+    },
+    check(scope) {
+      console.log(scope.row);
+      if (scope.row.checkedFather) {
+        this.user_idArr.push(scope.row.user_id);
+        this.myuser_idArr.push(scope.row.nick_name);
+      } else {
+        var index = this.user_idArr.indexOf(scope.row.user_id);
+        if (index > -1) {
+          this.user_idArr.splice(index, 1);
+          this.myuser_idArr.splice(index, 1);
+        }
+      }
+      console.log(this.user_idArr, this.myuser_idArr);
+      // this.item_id = this.item_idArr.toString();
+    },
+    backTo() {
+      this.$router.go(-1);
+    },
+    my_submit() {
+      this.dialogFormVisible = false;
+    },
+    selectUser() {
+      this.dialogFormVisible = true;
+      this.getdata();
+    },
+    getdata() {
+      const couponObj = {
+        // keyword:'',
+        // limit:'',
+        // display:'',
+        // is_page:'',
+        limit: 100,
+      };
+      this.$api.couponList(couponObj).then((res) => {
+        console.log(res.data.data.data);
+        this.options = res.data.data.data;
+      });
+      this.$api
+        .shopUserList({
+          page: this.myPageNum,
+        })
+        .then((res) => {
+          console.log(res.data.data.data);
+          this.total = res.data.data.total;
+          this.$store.commit("total", this.total);
+          this.myTableData = res.data.data.data;
+          this.myTableData.forEach((ele) => {
+            console.log(ele);
+            console.log(this.user_idArr.indexOf(ele.user_id));
+            if (this.user_idArr.indexOf(ele.user_id) > -1) {
+              this.$set(ele, "checkedFather", true);
+            } else {
+              this.$set(ele, "checkedFather", false);
+            }
+          });
+        });
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.$store.commit("per_page", val);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.$store.commit("toGrant_good_pageNum", val);
+    },
+    getTotal() {
+      this.myTotal = this.total;
+      console.log(this.myTotal);
+    },
+  },
+  created() {
+    console.log(this.toGrant_good_pageNum);
+    this.getdata();
+    this.$store.commit("toGrant_good_pageNum", 1);
+  },
 };
 </script>
 <style scoped>
 .toGrant .details {
-  width: 900px;
+  /* width: 900px; */
   margin: 26px 0 100px 60px;
 }
 .toGrant .details .title {
@@ -93,18 +265,18 @@ export default {
   cursor: pointer;
   height: 23px;
 }
-.toGrant .details .content{
+.toGrant .details .content {
   display: flex;
   align-items: center;
   margin-bottom: 40px;
 }
-.toGrant .details .content p{
+.toGrant .details .content p {
   margin-right: 16px;
 }
-.toGrant .details .bottom p{
+.toGrant .details .bottom p {
   margin-bottom: 20px;
 }
-.toGrant .btn{
-margin-top: 40px;
+.toGrant .btn {
+  margin-top: 40px;
 }
 </style>

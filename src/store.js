@@ -19,11 +19,15 @@ export default new Vuex.Store({
     breadListState: [], // 面包屑列表数据
     goodsList: [],
     sellSearch: '',
+    operate_test_Search:'',
     examine_search:'',
     order_testContent_search:'',
     order_commentList_search:'',
     good_pageNum: 1,
     examine_pageNum:1,
+    testPage_pageNum:1,
+    addGrant_good_pageNum:1,
+    toGrant_good_pageNum:1,
     pageNum:1,
     // passWord: null,//用户密码
     orderSelect: null,//订单状态
@@ -46,8 +50,16 @@ export default new Vuex.Store({
     tolistDetailsFlag:false,
     detailsInfo:{},
     comment_total:null,
+    couponData:null,
+    coupon_display:null,
   },
   mutations: {
+    coupon_display(state, num){
+      state.coupon_display = num;
+    },
+    couponData(state, obj) {
+      state.couponData = obj;
+    },
     comment_total(state, num) {
       state.comment_total = num;
     },
@@ -105,6 +117,9 @@ export default new Vuex.Store({
     sellSearch(state, str) {
       state.sellSearch = str;
     },
+    operate_test_Search(state, str) {
+      state.operate_test_Search = str;
+    },
     examine_search(state, str) {
       state.examine_search = str;
     },
@@ -113,6 +128,15 @@ export default new Vuex.Store({
     },
     examine_pageNum(state, num) {// examine页码
       state.examine_pageNum = num;
+    },
+    testPage_pageNum(state, num) {// testPage优惠券列表页码
+      state.testPage_pageNum = num;
+    },
+    addGrant_good_pageNum(state, num) {//页码
+      state.addGrant_good_pageNum = num;
+    },
+    toGrant_good_pageNum(state, num) {//页码
+      state.toGrant_good_pageNum = num;
     },
     pageNum(state, num) {//order页码
       state.pageNum = num;

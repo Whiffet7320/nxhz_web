@@ -26,7 +26,6 @@
         </el-form-item>
         <el-form-item label="APP店铺背景图 :">
           <el-image :src="data.shop_head_picture"> </el-image>
-          
         </el-form-item>
         <el-form-item label="店铺名称 :">
           <el-input :disabled="true" :placeholder="data.shop_name"></el-input>
@@ -239,9 +238,12 @@ export default {
     changePassword(obj) {
       //修改密码
       this.centerDialogVisible = true;
-      this.$api.infoChange(obj).then((res) => {
-        console.log(res);
-      });
+      console.log(obj.confirm_password)
+      if (obj.confirm_password) {
+        this.$api.infoChange(obj).then((res) => {
+          console.log(res);
+        });
+      }
       // .then(() => {
       //   sessionStorage.setItem("isLogin", false);
       //   this.$router.push({ path: "/" });
@@ -342,7 +344,7 @@ export default {
   width: 140px;
   height: 140px;
 }
-.shop-form  .el-dialog .el-form.demo-ruleForm {
+.shop-form .el-dialog .el-form.demo-ruleForm {
   /* display: flex; */
 }
 .shop-form .el-input {

@@ -6,10 +6,12 @@ const vue = new Vue()
 let myPost = axios.create({
     baseURL: urls.baseUrl,
     method: 'post',
+    timeout: 1000,
 })
 let myGet = axios.create({
     baseURL: urls.baseUrl,
     method: 'get',
+    timeout: 1000,
 })
 // myGet.interceptors.request.use(/*这是拦截器设置tokne*/
 //     config => {
@@ -114,7 +116,7 @@ myGet.interceptors.request.use(config => {
     return Promise.reject();
 })
 myPost.interceptors.response.use(response => {
-    if (response.status === 200) {
+    if (response.status === 200 && response.data.status == 1) {
         console.log(response.data.info == '' || response.data.info == "ok")
         if (response.data.info == '' || response.data.info == "ok") {
             return response;
@@ -126,13 +128,16 @@ myPost.interceptors.response.use(response => {
         }
         return response;
     } else {
+        vue.$message.error(response.data.info);
         Promise.reject();
     }
 }, error => {
     //错误跳转
     if (error.response.status === 500) {
         console.log(vue)
-        vue.$message.error(error.response.data.info);
+        if (error.response.data.info != '参数错误') {
+            vue.$message.error(error.response.data.info);
+        }
     } else if (error.response.status === 401) {
         sessionStorage.setItem("isLogin", false);
         console.log(sessionStorage.getItem("isLogin"));
@@ -154,8 +159,9 @@ myGet.interceptors.response.use(response => {
 }, error => {
     //错误跳转
     if (error.response.status === 500) {
-        // console.log()
-        vue.$message.error(error.response.data.info);
+        if (error.response.data.info != '参数错误') {
+            vue.$message.error(error.response.data.info);
+        }
     } else if (error.response.status === 401) {
         sessionStorage.setItem("isLogin", false);
         console.log(sessionStorage.getItem("isLogin"));
@@ -454,6 +460,46 @@ export default {
             url: urls.commentInfo,
             params: {
                 comment_id,
+            },
+        })
+    },
+    couponList(obj) {//优惠卷列表
+        return myGet({
+            url: urls.couponList,
+            params: {
+                ...obj,
+            },
+        })
+    },
+    couponEdit(obj) {//添加&编辑
+        return myPost({
+            url: urls.couponEdit,
+            params: {
+                ...obj,
+            },
+        })
+    },
+    couponSend(obj) {//分发优惠券
+        return myPost({
+            url: urls.couponSend,
+            params: {
+                ...obj,
+            },
+        })
+    },
+    shopUserList(obj) {//用户列表
+        return myGet({
+            url: urls.shopUserList,
+            params: {
+                ...obj,
+            },
+        })
+    },
+    couponChange(obj) {//排序&显示&删除
+        return myPost({
+            url: urls.couponChange,
+            params: {
+                ...obj,
             },
         })
     },

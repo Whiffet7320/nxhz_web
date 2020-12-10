@@ -12,17 +12,23 @@
         :inline="true"
       >
         <!-- <div class="inline-box"> -->
-        <el-form-item label="优惠券类型:" prop="region" class="region">
-          <el-select v-model="ruleForm.region" placeholder="全国通用">
-            <el-option label="全国通用" value="fu"></el-option>
-            <el-option label="店铺" value="fa"></el-option>
+        <el-form-item label="有无显示:" prop="region" class="region">
+          <el-select
+            v-model="value"
+            placeholder="请选择优惠券"
+            @change="optionGrant"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="搜索:" class="search">
-          <el-input
-            v-model="ruleForm.search"
-            placeholder="请输入优惠名称"
-          ></el-input>
+          <el-input v-model="search" placeholder="请输入优惠名称"></el-input>
         </el-form-item>
         <el-form-item class="contentTop-btn">
           <el-button type="primary" @click="onSubmit" class="search"
@@ -34,6 +40,9 @@
           <el-button type="success" class="toGrant" @click="toGrant"
             >发放优惠券</el-button
           >
+          <el-button type="success" class="toGrant" @click="addGrant"
+            >新增优惠券</el-button
+          >
         </el-form-item>
         <!-- </div> -->
       </el-form>
@@ -44,26 +53,71 @@
 export default {
   data() {
     return {
+      coupon_display: null,
+      search: "",
+      value: "",
+      // options: [
+      //   {
+      //     value:0,
+      //     name:'全场通用'
+      //   },
+      //           {
+      //     value:1,
+      //     name:'店铺券'
+      //   },
+      //           {
+      //     value:2,
+      //     name:'分类券'
+      //   },
+      //           {
+      //     value:3,
+      //     name:'商品券'
+      //   },
+      // ],
+      options: [
+        {
+          value: 0,
+          name: "不显示",
+        },
+        {
+          value: 1,
+          name: "显示",
+        },
+      ],
       ruleForm: {
         name: "",
         region: "",
         delivery: false,
         type: [],
-        search: "",
       },
     };
   },
   methods: {
+    optionGrant(val) {
+      console.log(val);
+      this.coupon_display = val;
+    },
     onSubmit() {
       console.log("submit!");
+      this.$store.commit("operate_test_Search", this.search);
+      this.$store.commit("testPage_pageNum", 1);
+      this.$store.commit("coupon_display", this.coupon_display);
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.ruleForm.search = "";
+      this.search = "";
+      this.coupon_display = "";
+      this.value = ''
+      this.$store.commit("testPage_pageNum", 1);
+      this.onSubmit();
     },
-    toGrant(){
-      this.$router.push({name:'toGrant'})
-    }
+    toGrant() {
+      this.$router.push({ name: "toGrant" });
+    },
+    addGrant() {
+      this.$store.commit("couponData", {});
+      this.$router.push({ name: "addGrant" });
+    },
   },
 };
 </script>
@@ -110,7 +164,7 @@ export default {
 .operate-contentTop .right .phone .el-input__inner {
   width: 190px;
 }
-.operate-contentTop .toGrant{
+.operate-contentTop .toGrant {
   margin-left: 40px;
 }
 </style>

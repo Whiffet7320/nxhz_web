@@ -523,6 +523,7 @@ export default {
           storage: scope.row.storage,
           unit: scope.row.unit,
           is_on_sale: scope.row.is_on_sale,
+          sort: scope.row.sort,
         };
         this.$api.skuEdit(skuNewObj).then((res) => {
           console.log(res);

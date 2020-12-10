@@ -113,7 +113,7 @@ export default {
           password: this.loginForm.password,
         })
         .then((res) => {
-          console.log(res)
+          console.log(res);
           if (res.status === 200 && res.data.status == 1) {
             // 在 sessionStorage中设置token，值为后台数据中的token
             console.log(res.data.data);
@@ -125,14 +125,7 @@ export default {
               this.$router.go(0);
               // this.$initWebSocket()
             }, 100);
-          } else {
-            console.log(res.data.info);
-            this.$message.error("用户名或者密码错误！");
           }
-        })
-        .catch((data) => {
-          console.log(data);
-          this.$message.error("请输入用户名和密码！");
         });
     },
   },

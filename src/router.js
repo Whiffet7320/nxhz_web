@@ -123,6 +123,11 @@ const routes = [
                 component: () => import('./components/operate/toGrant.vue')
             },
             {
+                path: 'addGrant', //新增优惠券 详情
+                name: 'addGrant',
+                component: () => import('./components/operate/addGrant.vue')
+            },
+            {
                 path: 'record',
                 name: 'record',
                 component: () => import('./components/operate/record.vue')
