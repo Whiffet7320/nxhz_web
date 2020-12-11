@@ -7,6 +7,15 @@
       </div>
       <div class="content">
         <el-dialog title="指定商品" :visible.sync="dialogFormVisible">
+          <div class="search">
+            <p>搜索：</p>
+            <el-input
+              @keyup.enter.native="getDataGood"
+              v-model="search"
+              placeholder="请输入商品名称"
+            ></el-input>
+          </div>
+
           <el-table :data="myTableData" style="width: 100%" ref="multipleTable">
             <el-table-column label="是否上架">
               <template slot-scope="scope">
@@ -112,6 +121,7 @@ import E from "wangeditor";
 export default {
   data() {
     return {
+      search: null,
       myItem: "",
       coupon_id: null,
       myitem_idArr: [],
@@ -140,6 +150,7 @@ export default {
       myTime: null,
       myTotal: null,
       myPageNum: 1,
+      flag: true,
     };
   },
   computed: {
@@ -207,7 +218,7 @@ export default {
     },
     getDate() {
       console.log(this.couponData);
-      this.getDataGood();
+      this.get_item_arrData();
       if (this.couponData) {
         this.my_couponData = this.couponData;
         this.coupon_id = this.couponData.id;
@@ -229,11 +240,42 @@ export default {
         this.$router.push({ name: "operatetest" });
       }
     },
+    get_item_arrData() {
+      this.$api
+        .goodsList({
+          limit: 100,
+          page: this.myPageNum,
+          keyword: this.search,
+        })
+        .then((res) => {
+          console.log(res.data.data);
+          this.myTableData = res.data.data.data;
+          this.total = res.data.data.total;
+          this.$store.commit("total", this.total);
+          console.log(res.data.data.data);
+          this.myTableData.forEach((ele) => {
+            console.log(ele.checkedFather);
+            // ele.checkedFather = false
+            console.log(this.item_idArr.indexOf(ele.goods_id));
+            // var index = this.item_idArr.indexOf(ele.goods_id);
+            if (this.item_idArr.indexOf(ele.goods_id) > -1) {
+              this.$set(ele, "checkedFather", true);
+              if (this.flag) {
+                this.myitem_idArr.push(ele.goods_name);
+              }
+            } else {
+              this.$set(ele, "checkedFather", false);
+              // this.myitem_idArr.splice(index, 1);
+            }
+          });
+        });
+    },
     getDataGood() {
       this.$api
         .goodsList({
           limit: this.per_page,
           page: this.myPageNum,
+          keyword: this.search,
         })
         .then((res) => {
           console.log(res.data.data);
@@ -249,12 +291,9 @@ export default {
             // var index = this.item_idArr.indexOf(ele.goods_id);
             if (this.item_idArr.indexOf(ele.goods_id) > -1) {
               this.$set(ele, "checkedFather", true);
-              this.myitem_idArr.push(ele.goods_name);
-              // var index = this.item_idArr.indexOf(ele.goods_id);
-              // if (index > -1) {
-              //   this.item_idArr.splice(index, 1);
-              //   this.myitem_idArr.splice(index, 1);
-              // }
+              if (this.flag) {
+                this.myitem_idArr.push(ele.goods_name);
+              }
             } else {
               this.$set(ele, "checkedFather", false);
               // this.myitem_idArr.splice(index, 1);
@@ -265,13 +304,19 @@ export default {
 
     shop() {
       this.dialogFormVisible = true;
+      this.flag = false;
       this.getDataGood();
     },
     check(scope) {
       console.log(scope.row);
       if (scope.row.checkedFather) {
-        this.item_idArr.push(scope.row.goods_id);
-        this.myitem_idArr.push(scope.row.goods_name);
+        var pushindex = this.item_idArr.indexOf(scope.row.goods_id);
+        if (pushindex == -1) {
+          this.item_idArr.push(scope.row.goods_id);
+          this.myitem_idArr.push(scope.row.goods_name);
+        }
+        // this.item_idArr.push(scope.row.goods_id);
+        // this.myitem_idArr.push(scope.row.goods_name);
       } else {
         var index = this.item_idArr.indexOf(scope.row.goods_id);
         if (index > -1) {
@@ -347,6 +392,17 @@ export default {
 };
 </script>
 <style >
+.addGrant .el-dialog__body {
+  padding: 6px 20px 24px 20px;
+}
+.addGrant .search {
+  display: flex;
+  align-items: center;
+}
+.addGrant .search p {
+  width: 56px;
+  transform: translateX(10px);
+}
 .addGrant #editor div {
   margin: 0;
 }

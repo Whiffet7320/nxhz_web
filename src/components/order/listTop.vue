@@ -53,6 +53,7 @@
           <span>搜索:</span>
           <el-input
             v-model="phoneInput"
+            @keyup.enter.native="onSubmit"
             placeholder="用户手机号/订单号"
           ></el-input>
         </div>

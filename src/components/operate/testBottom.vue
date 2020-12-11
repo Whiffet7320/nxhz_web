@@ -13,8 +13,7 @@
       <el-table-column prop="my_display" label="是否显示">
         <template scope="scope">
           <el-select
-            @visible-change="my_displayCli2(scope)"
-            @change="my_displayCli"
+            @change="my_displayCli(scope,$event)"
             v-model="scope.row.my_display"
             placeholder="请选择"
             ref="display"
@@ -116,28 +115,40 @@ export default {
     ...mapState(["operate_test_Search", "testPage_pageNum", "coupon_display"]),
   },
   methods: {
-    my_displayCli2(scope) {
-      // console.log(scope.$index);
-      this.index = scope.$index;
-      this.skuEditEnter(scope)
+    deleteRow(row){
+      // 删除优惠券
+      this.$api.couponChange({
+        coupon_id:row.id,
+        status:0
+      }).then((res)=>{
+        console.log(res)
+        this.getData();
+      })
     },
-    my_displayCli(selVal) {
-      console.log(selVal);
-      if (selVal == 1) {
-        this.tableData.forEach((ele, index) => {
-          if (index == this.index) {
-            console.log(ele);
-            ele.display = selVal
-          }
-        });
-      } else if (selVal == 0) {
-        this.tableData.forEach((ele, index) => {
-          if (index == this.index) {
-            console.log(ele);
-            ele.display = selVal
-          }
-        });
-      }
+    // my_displayCli2(scope) {
+    //   // console.log(scope.$index);
+    //   this.index = scope.$index;
+    //   // this.skuEditEnter(scope)
+    // },
+    my_displayCli(scope,selVal) {
+      console.log(scope,selVal);
+      scope.row.display = selVal
+      this.skuEditEnter(scope)
+      // if (selVal == 1) {
+      //   this.tableData.forEach((ele, index) => {
+      //     if (index == this.index) {
+      //       console.log(ele);
+      //       ele.display = selVal
+      //     }
+      //   });
+      // } else if (selVal == 0) {
+      //   this.tableData.forEach((ele, index) => {
+      //     if (index == this.index) {
+      //       console.log(ele);
+      //       ele.display = selVal
+      //     }
+      //   });
+      // }
       // scope.row.display
     },
     skuEditEnter(scope) {
@@ -247,7 +258,7 @@ export default {
 </script>
 
 <style >
-.testBottom {
+.operate-content .testBottom {
   padding: 0 60px 60px 60px;
 }
 </style>

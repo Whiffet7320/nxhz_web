@@ -33,6 +33,14 @@
       </div> -->
 
       <el-dialog title="选择用户" :visible.sync="dialogFormVisible">
+        <div class="search">
+          <p>搜索：</p>
+          <el-input
+            @keyup.enter.native="getdata"
+            v-model="search"
+            placeholder="请输入用户名称或电话"
+          ></el-input>
+        </div>
         <el-table :data="myTableData" style="width: 100%">
           <!-- <el-table-column prop="date" label="ID"> </el-table-column> -->
           <el-table-column label="选择用户">
@@ -125,6 +133,7 @@ export default {
       user_idArr: [],
       myuser_idArr: [],
       coupon_id: null,
+      search:null,
     };
   },
   computed: {
@@ -192,7 +201,7 @@ export default {
     },
     getdata() {
       const couponObj = {
-        // keyword:'',
+        // keyword:this.search,
         // limit:'',
         // display:'',
         // is_page:'',
@@ -205,6 +214,7 @@ export default {
       this.$api
         .shopUserList({
           page: this.myPageNum,
+          keyword:this.search,
         })
         .then((res) => {
           console.log(res.data.data.data);
@@ -242,7 +252,18 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
+.toGrant .el-dialog__body{
+  padding:6px 20px 24px 20px
+}
+.toGrant .search{
+  display: flex;
+  align-items: center;
+}
+.toGrant .search p{
+  width: 56px;
+  transform: translateX(10px);
+}
 .toGrant .details {
   /* width: 900px; */
   margin: 26px 0 100px 60px;
@@ -278,5 +299,11 @@ export default {
 }
 .toGrant .btn {
   margin-top: 40px;
+}
+.toGrant .flex{
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

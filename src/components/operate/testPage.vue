@@ -62,12 +62,6 @@ export default {
         this.$refs.page.$children[2].$el.children[0].click();
       }
     },
-    "$store.state.per_page": function () {
-      // console.log(this.$store.state.pageNum)
-      // this.myPageNum = this.$store.state.per_page;
-      this.getData();
-      // this.select();
-    },
     // "$store.state.selectValue": function () {
     //   this.mySelectValue = this.$store.state.selectValue;
     //   this.getData();

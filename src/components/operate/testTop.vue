@@ -28,7 +28,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="搜索:" class="search">
-          <el-input v-model="search" placeholder="请输入优惠名称"></el-input>
+          <el-input v-model="search" @keyup.enter.native="onSubmit" placeholder="请输入优惠名称"></el-input>
         </el-form-item>
         <el-form-item class="contentTop-btn">
           <el-button type="primary" @click="onSubmit" class="search"

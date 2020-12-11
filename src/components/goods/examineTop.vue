@@ -25,7 +25,7 @@
         </el-form-item>
 
         <el-form-item label="关键字:" class="search">
-          <el-input v-model="search" placeholder="请输入商品名称"></el-input>
+          <el-input v-model="search"  @keyup.enter.native="onSubmit" placeholder="请输入商品名称"></el-input>
         </el-form-item>
 
         <!-- <el-input v-model="search" size="mini" placeholder="输入关键字搜索" /> -->

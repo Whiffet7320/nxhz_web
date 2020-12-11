@@ -279,19 +279,22 @@ export default {
         goods_img: scope.row.goods_img,
       };
       console.log(storageObj);
-      this.$api.goodsEdit(storageObj).then((res) => {
-        if (res.data.status == 1) {
-          console.log(res.data);
-          // this.$message({
-          //   message: "保存成功",
-          //   type: "success",
-          // });
-        } else {
-          // this.$message.error(res.data.info);
-        }
-      }).then(()=>{
-        this.getData();
-      })
+      this.$api
+        .goodsEdit(storageObj)
+        .then((res) => {
+          if (res.data.status == 1) {
+            console.log(res.data);
+            // this.$message({
+            //   message: "保存成功",
+            //   type: "success",
+            // });
+          } else {
+            // this.$message.error(res.data.info);
+          }
+        })
+        .then(() => {
+          this.getData();
+        });
     },
     EditFocus(scope) {
       console.log(scope.row, scope.row.sort);
@@ -536,6 +539,12 @@ export default {
 <style >
 .sell-content .testBottom {
   padding: 0 60px 60px 60px;
+}
+.right-content form label {
+  /* width: 50px !important; */
+  text-align: right !important;
+  margin-right: 10px;
+  font-size: 14px;
 }
 .demo-table-expand {
   font-size: 0;
