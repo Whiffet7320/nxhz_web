@@ -1,6 +1,12 @@
 <template>
   <div class="wrapper" v-if="isLogin == 'true'">
     <div class="wrapper-two">
+      <audio
+        controls="controls"
+        hidden
+        src="./assets/2653.mp3"
+        ref="audio"
+      ></audio>
       <sys-header></sys-header>
       <sys-menu></sys-menu>
     </div>
@@ -27,18 +33,31 @@ export default {
     };
   },
   computed: {
-    ...mapState(["flag"]),
+    ...mapState(["flag", "mp3_say"]),
   },
   components: {
     sysHeader,
     sysMenu,
     login,
   },
+  watch: {
+    "$store.state.mp3_say": function () {
+      this.mp3_play();
+    },
+  },
   methods: {
     getData() {
       this.isLogin = sessionStorage.getItem("isLogin");
       console.log(this.isLogin);
       // this.$router.go(0);
+    },
+    mp3_play() {
+      if (this.mp3_say) {
+        console.log('play')
+        this.$refs.audio.currentTime = 0; //从头开始播放提示音
+        this.$refs.audio.play(); //播放
+        this.$store.commit('mp3_say',false)
+      }
     },
   },
   created() {

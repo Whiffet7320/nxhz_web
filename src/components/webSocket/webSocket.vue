@@ -260,6 +260,7 @@ export default {
       webFlag: false,
       dplayerList: [],
       dialogVisible: false,
+      dp:null,
     };
   },
   computed: {
@@ -278,8 +279,18 @@ export default {
   },
   mounted() {
     console.log(document.getElementById("dplayer1"));
+    // console.log(document.getElementsByClassName('el-dialog__close')[0])
+    // let closeBtn = document.getElementsByClassName('el-dialog__close')[0]
+    // closeBtn.onclick = function(){
+    //   console.log(1777)
+    // }
   },
   watch: {
+    "dialogVisible":function(){
+      if(this.dialogVisible == false){
+        this.dp.pause()
+      }
+    },
     "$store.state.isDotNum": function () {
       this.isDotList = this.$store.state.isDotNum;
       console.log(this.sayObj);
@@ -479,7 +490,7 @@ export default {
       this.dialogVisible = true;
       setTimeout(() => {
         // console.log(document.getElementById("dplayer1"));
-        new this.$DPlayer({
+        this.dp = new this.$DPlayer({
           container: document.getElementById("dplayer1"),
           screenshot: true,
           autoplay: true,

@@ -95,7 +95,7 @@
             <el-table-column prop="address" label="成本价">
               <template slot-scope="scope">
                 <el-input
-                  v-model="scope.row.shop_price"
+                  v-model="scope.row.prime_cost"
                   placeholder=""
                 ></el-input>
               </template>
@@ -104,6 +104,14 @@
               <template slot-scope="scope">
                 <el-input
                   v-model="scope.row.shop_price"
+                  placeholder=""
+                ></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="address" label="市场价">
+              <template slot-scope="scope">
+                <el-input
+                  v-model="scope.row.market_price"
                   placeholder=""
                 ></el-input>
               </template>
@@ -494,8 +502,8 @@ export default {
           sku_id: scope.row.sku_id,
           // goods_id: this.goods_id, //添加必须传
           sale_attr_name: scope.row.sale_attr_name,
-          // prime_cost:,
-          // market_price:,
+          prime_cost:scope.row.prime_cost,
+          market_price:scope.row.market_price,
           shop_price: scope.row.shop_price,
           goods_img: scope.row.goods_img,
           // weight:,
@@ -507,7 +515,7 @@ export default {
         console.log(skuNewObj2);
         this.$api.skuEdit(skuNewObj2).then((res) => {
           console.log(res);
-        })
+        });
       } else {
         // 添加
         console.log(scope.row);
@@ -515,8 +523,8 @@ export default {
           // sku_id:scope.row.sku_id,
           goods_id: this.goods_id, //添加必须传
           sale_attr_name: scope.row.sale_attr_name,
-          // prime_cost:,
-          // market_price:,
+          prime_cost:scope.row.prime_cost,
+          market_price:scope.row.market_price,
           shop_price: scope.row.shop_price,
           goods_img: scope.row.goods_img,
           // weight:,

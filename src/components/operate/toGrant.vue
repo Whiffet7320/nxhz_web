@@ -36,10 +36,15 @@
         <div class="search">
           <p>搜索：</p>
           <el-input
-            @keyup.enter.native="getdata"
+            @keyup.enter.native="search_getdata"
             v-model="search"
             placeholder="请输入用户名称或电话"
           ></el-input>
+          <el-button type="primary" @click="search_getdata" class="search"
+            >搜索</el-button
+          >
+          <el-button class="reset" @click="resetForm">重置</el-button>
+          
         </div>
         <el-table :data="myTableData" style="width: 100%">
           <!-- <el-table-column prop="date" label="ID"> </el-table-column> -->
@@ -111,10 +116,11 @@
         </div>
       </el-dialog>
       <!--  -->
-      <el-button @click="selectUser">选择用户</el-button>
+      <el-button @click="selectUser">选择用户发放</el-button>
+      <el-button class="reset" @click="selectAll">全选用户一键发放</el-button>
       <div v-if="myuser_idArr.length > 0">{{ myuser_idArr }}</div>
       <div class="btn">
-        <el-button type="primary" @click="couponSend_btn">发放</el-button>
+        <el-button type="primary" v-if="myuser_idArr.length > 0" @click="couponSend_btn">发放</el-button>
       </div>
     </div>
   </div>
@@ -133,7 +139,7 @@ export default {
       user_idArr: [],
       myuser_idArr: [],
       coupon_id: null,
-      search:null,
+      search: null,
     };
   },
   computed: {
@@ -158,11 +164,30 @@ export default {
     },
   },
   methods: {
+    selectAll() {
+      this.couponSend_btn("all");
+    },
+    search_getdata() {
+      this.$store.commit("toGrant_good_pageNum", 1);
+      setTimeout(() => {
+        this.getdata();
+      }, 100);
+    },
+    resetForm() {
+      this.search = "";
+      this.myuser_idArr = "";
+      this.user_idArr = "";
+      this.$store.commit("toGrant_good_pageNum", 1);
+      this.getdata("reset");
+    },
     optionGrant(val) {
       console.log(val);
       this.coupon_id = val;
     },
-    couponSend_btn() {
+    couponSend_btn(str) {
+      if(str == 'all'){
+        this.user_idArr = ""
+      }
       const couponSendObj = {
         coupon_id: this.coupon_id,
         user_id: this.user_idArr,
@@ -199,38 +224,74 @@ export default {
       this.dialogFormVisible = true;
       this.getdata();
     },
-    getdata() {
-      const couponObj = {
-        // keyword:this.search,
-        // limit:'',
-        // display:'',
-        // is_page:'',
-        limit: 100,
-      };
-      this.$api.couponList(couponObj).then((res) => {
-        console.log(res.data.data.data);
-        this.options = res.data.data.data;
-      });
-      this.$api
-        .shopUserList({
-          page: this.myPageNum,
-          keyword:this.search,
-        })
-        .then((res) => {
+    getdata(str) {
+      if (str == "reset") {
+        const couponObj = {
+          // keyword:this.search,
+          // limit:'',
+          // display:'',
+          // is_page:'',
+          limit: 10,
+        };
+        this.$api.couponList(couponObj).then((res) => {
           console.log(res.data.data.data);
-          this.total = res.data.data.total;
-          this.$store.commit("total", this.total);
-          this.myTableData = res.data.data.data;
-          this.myTableData.forEach((ele) => {
-            console.log(ele);
-            console.log(this.user_idArr.indexOf(ele.user_id));
-            if (this.user_idArr.indexOf(ele.user_id) > -1) {
-              this.$set(ele, "checkedFather", true);
-            } else {
-              this.$set(ele, "checkedFather", false);
-            }
-          });
+          this.options = res.data.data.data;
         });
+        this.$api
+          .shopUserList({
+            page: this.myPageNum,
+            keyword: this.search,
+          })
+          .then((res) => {
+            console.log(res.data.data.data);
+            this.total = res.data.data.total;
+            this.$store.commit("total", this.total);
+            this.myTableData = res.data.data.data;
+            this.myTableData.forEach((ele) => {
+              this.$set(ele, "checkedFather", false);
+              // console.log(ele);
+              // console.log(this.user_idArr.indexOf(ele.user_id));
+              // if (this.user_idArr.indexOf(ele.user_id) > -1) {
+              //   this.$set(ele, "checkedFather", true);
+              // } else {
+              //   this.$set(ele, "checkedFather", false);
+              // }
+            });
+          });
+        return;
+      } else {
+        const couponObj = {
+          // keyword:this.search,
+          // limit:'',
+          // display:'',
+          // is_page:'',
+          limit: 10,
+        };
+        this.$api.couponList(couponObj).then((res) => {
+          console.log(res.data.data.data);
+          this.options = res.data.data.data;
+        });
+        this.$api
+          .shopUserList({
+            page: this.myPageNum,
+            keyword: this.search,
+          })
+          .then((res) => {
+            console.log(res.data.data.data);
+            this.total = res.data.data.total;
+            this.$store.commit("total", this.total);
+            this.myTableData = res.data.data.data;
+            this.myTableData.forEach((ele) => {
+              console.log(ele);
+              console.log(this.user_idArr.indexOf(ele.user_id));
+              if (this.user_idArr.indexOf(ele.user_id) > -1) {
+                this.$set(ele, "checkedFather", true);
+              } else {
+                this.$set(ele, "checkedFather", false);
+              }
+            });
+          });
+      }
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -253,14 +314,21 @@ export default {
 };
 </script>
 <style>
-.toGrant .el-dialog__body{
-  padding:6px 20px 24px 20px
+.toGrant .search .el-input {
+  width: 260px;
+  margin-right: 20px;
 }
-.toGrant .search{
+.toGrant .search .el-input__inner {
+  width: 260px;
+}
+.toGrant .el-dialog__body {
+  padding: 6px 20px 24px 20px;
+}
+.toGrant .search {
   display: flex;
   align-items: center;
 }
-.toGrant .search p{
+.toGrant .search p {
   width: 56px;
   transform: translateX(10px);
 }
@@ -272,7 +340,8 @@ export default {
   width: 100%;
   height: 116px;
   display: flex;
-  margin-left: 20px;
+  /* margin-left: 20px; */
+  transform: translateX(20px);
 }
 .toGrant .details .title p {
   font-size: 40px;
@@ -300,7 +369,7 @@ export default {
 .toGrant .btn {
   margin-top: 40px;
 }
-.toGrant .flex{
+.toGrant .flex {
   display: flex;
   margin-top: 20px;
   align-items: center;

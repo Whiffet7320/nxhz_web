@@ -52,8 +52,12 @@ export default new Vuex.Store({
     comment_total:null,
     couponData:null,
     coupon_display:null,
+    mp3_say:false,
   },
   mutations: {
+    mp3_say(state, boolean){
+      state.mp3_say = boolean;
+    },
     coupon_display(state, num){
       state.coupon_display = num;
     },

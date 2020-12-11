@@ -26,6 +26,10 @@
                 </template>
               </el-table-column>
               <el-table-column
+                prop="prime_cost"
+                label="成本价"
+              ></el-table-column>
+              <el-table-column
                 prop="shop_price"
                 label="销售价"
               ></el-table-column>
@@ -34,7 +38,8 @@
 
               <el-table-column prop="verify_state" label="审核状态">
               </el-table-column>
-               <el-table-column prop="mySys_on_sale" label="上架状态"> </el-table-column>
+              <el-table-column prop="myis_on_sale" label="上架状态">
+              </el-table-column>
               <el-table-column fixed="right" label="操作" width="200">
               </el-table-column>
             </el-table>
@@ -53,6 +58,7 @@
           <img :src="scope.row.goods_img" style="height: 50px" />
         </template>
       </el-table-column>
+      <el-table-column prop="address3" label="成本价"> </el-table-column>
       <el-table-column prop="address3" label="销售价"> </el-table-column>
       <el-table-column prop="address3" label="库存"> </el-table-column>
       <el-table-column prop="myVerify" label="审核状态"> </el-table-column>
@@ -122,6 +128,14 @@ export default {
           this.tableData.forEach((ele) => {
             // this.$set(ele.sku, "index", index);
             this.sku.push(ele.sku);
+            ele.sku.forEach(sku_ele=>{
+              console.log(sku_ele,'skuele')
+              if(sku_ele.is_on_sale == 1){
+                sku_ele.myis_on_sale = '正常'
+              }else if (sku_ele.is_on_sale == 0) {
+              sku_ele.myis_on_sale = "下架";
+            }
+            })
             if (ele.verify_state == 0) {
               ele.myVerify = "待审核";
             } else if (ele.verify_state == 1) {

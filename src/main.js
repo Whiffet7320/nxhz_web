@@ -65,7 +65,8 @@ function initWebSocket() {
 
     //判断页面有没有存在websocket连接123
     if (window.WebSocket) {
-      let ws = new WebSocket("ws://192.168.2.200:8282");
+      let ws = new WebSocket("ws://192.168.2.200:8282");//测试服
+      // let ws = new WebSocket("ws://119.3.155.113:8282");
       console.log(ws)
       _this.ws = ws;
       ws.onopen = function () {
@@ -130,7 +131,8 @@ function initWebSocket() {
         }
         if (resData.type == "say") {
           console.log("say说");
-          store.commit('sayObj',resData.data)
+          store.commit('mp3_say', true)
+          store.commit('sayObj', resData.data)
           store.commit('overallIsDot', true)
           isDotNumList.push(Number(resData.data.send_id.slice(2)))
           store.commit('isDotNum', isDotNumList)

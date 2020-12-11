@@ -10,14 +10,19 @@
           <div class="search">
             <p>搜索：</p>
             <el-input
-              @keyup.enter.native="getDataGood"
+              @keyup.enter.native="search_getDataGood"
               v-model="search"
               placeholder="请输入商品名称"
             ></el-input>
+            <el-button type="primary" @click="search_getDataGood" class="search"
+              >搜索</el-button
+            >
+            <el-button class="reset" @click="resetForm">重置</el-button>
+            <!-- <el-button class="reset" @click="selectAll">全选</el-button> -->
           </div>
 
           <el-table :data="myTableData" style="width: 100%" ref="multipleTable">
-            <el-table-column label="是否上架">
+            <el-table-column label="" width="100">
               <template slot-scope="scope">
                 <!-- <input type="text" v-model="scope.row.checkedFather" /> -->
                 <el-checkbox
@@ -186,6 +191,23 @@ export default {
     },
   },
   methods: {
+    search_getDataGood() {
+      this.$store.commit("addGrant_good_pageNum", 1);
+      setTimeout(() => {
+        this.getDataGood();
+      }, 100);
+    },
+    resetForm() {
+      this.search = "";
+      this.item_id = "";
+      this.myitem_idArr = "";
+      this.item_idArr = "";
+      this.$store.commit("addGrant_good_pageNum", 1);
+      this.getDataGood("reset");
+    },
+    selectAll() {
+      this.getDataGood("all");
+    },
     my_submit() {
       this.dialogFormVisible = false;
       this.myItem = this.myitem_idArr;
@@ -270,36 +292,77 @@ export default {
           });
         });
     },
-    getDataGood() {
-      this.$api
-        .goodsList({
-          limit: this.per_page,
-          page: this.myPageNum,
-          keyword: this.search,
-        })
-        .then((res) => {
-          console.log(res.data.data);
-          this.myTableData = res.data.data.data;
-          this.total = res.data.data.total;
-          this.$store.commit("total", this.total);
-          console.log(res.data.data.data);
+    getDataGood(str) {
+      if (str == "all") {
+        this.$api
+          .goodsList({
+            limit: 10000,
+            page: this.myPageNum,
+            keyword: this.search,
+          })
+          .then((res) => {
+            console.log(res.data.data);
+            this.myTableData = res.data.data.data;
+            this.total = res.data.data.total;
+            this.$store.commit("total", this.total);
+            console.log(res.data.data.data);
 
-          this.myTableData.forEach((ele) => {
-            console.log(ele.checkedFather);
-            // ele.checkedFather = false
-            console.log(this.item_idArr.indexOf(ele.goods_id));
-            // var index = this.item_idArr.indexOf(ele.goods_id);
-            if (this.item_idArr.indexOf(ele.goods_id) > -1) {
-              this.$set(ele, "checkedFather", true);
-              if (this.flag) {
-                this.myitem_idArr.push(ele.goods_name);
+            this.myTableData.forEach((ele, index) => {
+              if (this.item_idArr.indexOf(ele.goods_id) == -1) {
+                setTimeout(()=>{
+                  document.getElementsByClassName("el-checkbox")[index].click();
+                },1000)
               }
-            } else {
-              this.$set(ele, "checkedFather", false);
-              // this.myitem_idArr.splice(index, 1);
-            }
+              this.$set(ele, "checkedFather", true);
+            });
           });
-        });
+        return;
+      } else if (str == "reset") {
+        this.$api
+          .goodsList({
+            limit: this.per_page,
+            page: this.myPageNum,
+            keyword: this.search,
+          })
+          .then((res) => {
+            console.log(res.data.data);
+            this.myTableData = res.data.data.data;
+            this.total = res.data.data.total;
+            this.$store.commit("total", this.total);
+            console.log(res.data.data.data);
+
+            this.myTableData.forEach((ele) => {
+              this.$set(ele, "checkedFather", false);
+            });
+          });
+        return;
+      } else {
+        this.$api
+          .goodsList({
+            limit: this.per_page,
+            page: this.myPageNum,
+            keyword: this.search,
+          })
+          .then((res) => {
+            console.log(res.data.data);
+            this.myTableData = res.data.data.data;
+            this.total = res.data.data.total;
+            this.$store.commit("total", this.total);
+            console.log(res.data.data.data);
+
+            this.myTableData.forEach((ele) => {
+              console.log(ele.checkedFather);
+              if (this.item_idArr.indexOf(ele.goods_id) > -1) {
+                this.$set(ele, "checkedFather", true);
+                if (this.flag) {
+                  this.myitem_idArr.push(ele.goods_name);
+                }
+              } else {
+                this.$set(ele, "checkedFather", false);
+              }
+            });
+          });
+      }
     },
 
     shop() {
@@ -308,7 +371,7 @@ export default {
       this.getDataGood();
     },
     check(scope) {
-      console.log(scope.row);
+      console.log(scope.row, 123);
       if (scope.row.checkedFather) {
         var pushindex = this.item_idArr.indexOf(scope.row.goods_id);
         if (pushindex == -1) {
@@ -392,6 +455,13 @@ export default {
 };
 </script>
 <style >
+.addGrant .search .el-input {
+  width: 260px;
+  margin-right: 20px;
+}
+.addGrant .search .el-input__inner {
+  width: 260px;
+}
 .addGrant .el-dialog__body {
   padding: 6px 20px 24px 20px;
 }
@@ -400,7 +470,7 @@ export default {
   align-items: center;
 }
 .addGrant .search p {
-  width: 56px;
+  width: 70px;
   transform: translateX(10px);
 }
 .addGrant #editor div {

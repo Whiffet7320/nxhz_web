@@ -27,10 +27,13 @@
               </el-table-column>
               <el-table-column label="分类"> </el-table-column>
               <el-table-column
+                prop="prime_cost"
+                label="成本价"
+              ></el-table-column>
+              <el-table-column
                 prop="shop_price"
                 label="销售价"
               ></el-table-column>
-
               <!-- 库存!!!!!! -->
 
               <el-table-column
@@ -105,6 +108,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="catName" label="分类"> </el-table-column>
+      <el-table-column prop="address3" label="成本价"> </el-table-column>
       <el-table-column prop="address3" label="销售价"> </el-table-column>
       <el-table-column prop="address3" label="库存"> </el-table-column>
       <el-table-column prop="myVerify" label="审核状态"> </el-table-column>

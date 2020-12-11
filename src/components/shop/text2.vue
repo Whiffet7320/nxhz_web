@@ -219,7 +219,6 @@ export default {
   created() {
     this.passWord = sessionStorage.getItem("passWord");
     console.log(this.passWord, this.myUser);
-    // this.$initWebSocket();
     this.$api
       .info()
       .then((res) => {

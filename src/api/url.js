@@ -3,7 +3,8 @@ export default {
     userList: '/shop/message/user/list',//获取聊天用户列表
     userSay: '/shop/message/user/say',//聊天
     userHistory: '/shop/message/user/history',//聊天历史记录
-    baseUrl: 'http://ufol.ngrok.farambi.top',
+    baseUrl: 'http://ufol.ngrok.farambi.top',//测试服
+    // baseUrl:'http://api.xianfmei.com/',
     login: '/shop/passport/login',
     info: '/shop/info',
     goodsList: '/shop/goods/list',

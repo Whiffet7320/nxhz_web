@@ -120,10 +120,8 @@ export default {
             sessionStorage.setItem("token", res.data.data.token);
             sessionStorage.setItem("isLogin", true);
             this.$router.push({ name: "test" });
-            // this.$initWebSocket()
             setTimeout(() => {
               this.$router.go(0);
-              // this.$initWebSocket()
             }, 100);
           }
         });

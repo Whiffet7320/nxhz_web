@@ -1,14 +1,14 @@
 <template>
   <div class="testBottom">
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="coupon_name" label="优惠券名称"> </el-table-column>
-      <el-table-column prop="coupon_money" label="优惠券金额">
+      <el-table-column prop="coupon_name" label="优惠券名称" :show-overflow-tooltip="true"> </el-table-column>
+      <el-table-column prop="coupon_money" label="优惠券金额" :show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column prop="my_create_time" label="添加时间">
+      <el-table-column prop="my_create_time" label="添加时间" :show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column prop="my_expiration_time" label="过期时间">
+      <el-table-column prop="my_expiration_time" label="过期时间" :show-overflow-tooltip="true">
       </el-table-column>
-      <el-table-column prop="my_coupon_type" label="优惠券类型">
+      <el-table-column prop="my_coupon_type" label="优惠券类型" :show-overflow-tooltip="true">
       </el-table-column>
       <el-table-column prop="my_display" label="是否显示">
         <template scope="scope">

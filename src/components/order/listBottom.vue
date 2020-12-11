@@ -87,15 +87,6 @@
           <el-button @click="handleClick(scope.row)" type="text" size="small"
             >详情</el-button
           >
-          <el-button
-            @click.native.prevent="
-              deleteRow(scope.$index, tableData, scope.row)
-            "
-            type="text"
-            size="small"
-          >
-            删除
-          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -161,10 +152,6 @@ export default {
       this.$store.commit("changeDetailsInfo", row);
       this.$store.commit("tolistDetailsFlag", true);
       this.$router.push({ name: "listDetails" });
-    },
-    deleteRow(index, rows) {
-      rows.splice(index, 1);
-      // 删除后要把数据页删掉  ！！！
     },
     getData() {
       console.log(this.myPer_page)
