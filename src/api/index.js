@@ -163,7 +163,6 @@ myPost.interceptors.response.use(response => {
 })
 myGet.interceptors.response.use(response => {
     if (response.status === 200 && response.data.status == 1) {
-        console.log(response.data.info == '' || response.data.info == "ok")
         if (response.data.info == '' || response.data.info == "ok") {
             return response;
         } else {
@@ -171,9 +170,10 @@ myGet.interceptors.response.use(response => {
                 message: response.data.info,
                 type: "success",
             });
+            return response;
         }
-        return response;
-    } else {
+    }
+    else {
         vue.$message.error(response.data.info);
         Promise.reject();
     }

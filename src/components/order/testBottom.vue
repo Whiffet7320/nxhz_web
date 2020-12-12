@@ -270,10 +270,9 @@ export default {
       };
       console.log(orderListObj);
       this.$api.orderList(orderListObj).then((res) => {
-        console.log(res.data.data);
-        this.orderList = res.data.data;
-        this.$store.commit("goodsList", res.data.data);
-        this.total = res.data.total;
+        this.orderList = res.data.data.data;
+        this.$store.commit("goodsList", res.data.data.data);
+        this.total = res.data.data.total;
         // this.per_page = res.data.per_page;
         console.log(this.total, this.per_page);
         // this.$store.commit("per_page", this.per_page);
