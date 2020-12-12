@@ -92,9 +92,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(["order_testContent_search", "startTime", "endTime"]),
+    ...mapState(["order_testContent_search", "startTime", "endTime","orderSelect"]),
   },
   created() {
+    this.ruleForm.region = this.orderSelect
     this.phoneInput = this.order_testContent_search;
     if (this.startTime && this.endTime) {
       this.ruleForm.date1 = this.startTime;
@@ -153,6 +154,7 @@ export default {
       this.ruleForm.date2 = "";
       this.mystartTime = "";
       this.myendTime = "";
+      this.ruleForm.region = "";
       this.$store.commit("pageNum", 1);
       this.onSubmit();
     },
