@@ -45,13 +45,13 @@
             v-if="scope.row.order_status == 2"
             >发货</el-button
           >
-          <el-button
+          <!-- <el-button
             type="text"
             size="small"
             @click="Logistics"
             v-else-if="scope.row.order_status == 3"
             >物流信息</el-button
-          >
+          > -->
         </template>
       </el-table-column>
     </el-table>
@@ -266,6 +266,7 @@ export default {
         keyword: this.mySearch,
         limit: this.myPer_page,
         page: this.myPageNum,
+        order_status:this.orderSelect
       };
       console.log(orderListObj);
       this.$api.orderList(orderListObj).then((res) => {
@@ -309,17 +310,17 @@ export default {
           });
         });
         this.$store.commit("total", this.orderList.length);
-        this.orderList = this.orderList.filter((ele) => {
-          if (this.myOrderSelect == "") {
-            return true;
-          }
-          return ele.myOrder_status == this.myOrderSelect;
-          // console.log(ele.myOrder_status==this.myOrderSelect)
-        });
-        console.log(this.orderList);
-        this.arr = this.orderList.filter((ele) => {
-          return ele.order_status == 2;
-        });
+        // this.orderList = this.orderList.filter((ele) => {
+        //   if (this.myOrderSelect == "") {
+        //     return true;
+        //   }
+        //   return ele.myOrder_status == this.myOrderSelect;
+        //   // console.log(ele.myOrder_status==this.myOrderSelect)
+        // });
+        // console.log(this.orderList);
+        // this.arr = this.orderList.filter((ele) => {
+        //   return ele.order_status == 2;
+        // });
         console.log(this.arr);
       });
     },

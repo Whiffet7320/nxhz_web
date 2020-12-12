@@ -97,7 +97,12 @@ let myGet = axios.create({
 // })
 myPost.interceptors.request.use(config => {
     if (sessionStorage.getItem("token")) {
-        config.headers.token = sessionStorage.token
+        // config.headers.token = sessionStorage.token;
+        config.headers = {
+            'token': sessionStorage.token,
+            'Access-Control-Allow-Origin': '*',
+            "access-control-allow-credentials": "true"
+        }
     }
     console.log(config)
     return config;
@@ -107,7 +112,12 @@ myPost.interceptors.request.use(config => {
 })
 myGet.interceptors.request.use(config => {
     if (sessionStorage.getItem("token")) {
-        config.headers.token = sessionStorage.token
+        config.headers = {
+            'token': sessionStorage.token,
+            'Access-Control-Allow-Origin': '*',
+            "access-control-allow-credentials": "true"
+        }
+        // config.headers.token = sessionStorage.token;
     }
     console.log(config)
     return config;
@@ -145,16 +155,26 @@ myPost.interceptors.response.use(response => {
         router.push({ path: "/" })
         router.go(0)
         return Promise.reject();
+    } else {
+        if (error.response.data.info != '参数错误') {
+            vue.$message.error(error.response.data.info);
+        }
     }
 })
 myGet.interceptors.response.use(response => {
-    if (response.status === 200) {
-        // vue.$message({
-        //     message: response.data.info,
-        //     type: "success",
-        // });
+    if (response.status === 200 && response.data.status == 1) {
+        console.log(response.data.info == '' || response.data.info == "ok")
+        if (response.data.info == '' || response.data.info == "ok") {
+            return response;
+        } else {
+            vue.$message({
+                message: response.data.info,
+                type: "success",
+            });
+        }
         return response;
     } else {
+        vue.$message.error(response.data.info);
         Promise.reject();
     }
 }, error => {
@@ -170,6 +190,10 @@ myGet.interceptors.response.use(response => {
         router.push({ path: "/" })
         router.go(0)
         return Promise.reject();
+    } else {
+        if (error.response.data.info != '参数错误') {
+            vue.$message.error(error.response.data.info);
+        }
     }
 })
 

@@ -14,12 +14,12 @@
         <!-- <div class="inline-box"> -->
         <el-form-item label="订单状态:" prop="region" class="region">
           <el-select v-model="ruleForm.region" placeholder="订单状态">
-            <el-option label="待付款" value="待付款"></el-option>
-            <el-option label="待发货" value="待发货"></el-option>
-            <el-option label="待收货" value="待收货"></el-option>
-            <el-option label="待评价" value="待评价"></el-option>
-            <el-option label="交易完成" value="交易完成"></el-option>
-            <el-option label="交易关闭" value="交易关闭"></el-option>
+            <el-option label="已取消" value="0"></el-option>
+            <el-option label="待付款" value="1"></el-option>
+            <el-option label="待发货" value="2"></el-option>
+            <el-option label="待收货" value="3"></el-option>
+            <el-option label="待评价" value="4"></el-option>
+            <el-option label="已完成" value="5"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="下单时间" class="time">

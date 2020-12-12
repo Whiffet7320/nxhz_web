@@ -21,7 +21,8 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 Vue.prototype.$api = api
 
-Vue.prototype.$myAxios = axios
+Vue.prototype.$myAxios = axios;
+// axios.defaults.baseURL = '/api';
 Vue.prototype.$bus = new Vue()
 Vue.prototype.$getlodop = getLodop
 // Vue.prototype.$videojs = videojs

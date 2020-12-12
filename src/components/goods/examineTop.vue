@@ -98,6 +98,7 @@ export default {
     toGrant() {
       this.$store.commit("goodsId", " ");
       this.$store.commit("edit", { sort: "0" });
+      this.$store.commit("nameSort", { nameF: "first", nameS: "second" });
       this.$store.commit("examine_pageNum", 1);
       this.$store.commit("toEditFlag", true);
       this.$router.push({ name: "Edit" });
