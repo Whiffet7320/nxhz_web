@@ -203,7 +203,9 @@
         <el-tab-pane label="商品相册" name="third" v-if="sku_image_Flag">
           <div class="blockImage">
             <div class="block" v-for="(item, index) in imgList" :key="index">
-              <el-image :src="item.image_path"></el-image>
+              <viewer>
+                <img :src="item.image_path" class="img_cyy" />
+              </viewer>
               <i class="el-icon-circle-close" @click="deleImage(item)"></i>
             </div>
             <el-button
@@ -502,8 +504,8 @@ export default {
           sku_id: scope.row.sku_id,
           // goods_id: this.goods_id, //添加必须传
           sale_attr_name: scope.row.sale_attr_name,
-          prime_cost:scope.row.prime_cost,
-          market_price:scope.row.market_price,
+          prime_cost: scope.row.prime_cost,
+          market_price: scope.row.market_price,
           shop_price: scope.row.shop_price,
           goods_img: scope.row.goods_img,
           // weight:,
@@ -523,8 +525,8 @@ export default {
           // sku_id:scope.row.sku_id,
           goods_id: this.goods_id, //添加必须传
           sale_attr_name: scope.row.sale_attr_name,
-          prime_cost:scope.row.prime_cost,
-          market_price:scope.row.market_price,
+          prime_cost: scope.row.prime_cost,
+          market_price: scope.row.market_price,
           shop_price: scope.row.shop_price,
           goods_img: scope.row.goods_img,
           // weight:,
@@ -726,6 +728,10 @@ export default {
 };
 </script>
 <style>
+.shop-form .img_cyy{
+  width: 100px;
+  height: 100px;
+}
 .shop-form #editor {
   width: 840px;
 }

@@ -65,8 +65,8 @@ function initWebSocket() {
 
     //判断页面有没有存在websocket连接123
     if (window.WebSocket) {
-      let ws = new WebSocket("ws://192.168.2.200:8282");//测试服
-      // let ws = new WebSocket("ws://119.3.155.113:8282");
+      // let ws = new WebSocket("ws://192.168.2.200:8282");//测试服
+      let ws = new WebSocket("ws://119.3.155.113:8282");
       console.log(ws)
       _this.ws = ws;
       ws.onopen = function () {

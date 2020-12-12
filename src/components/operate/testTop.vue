@@ -15,7 +15,7 @@
         <el-form-item label="有无显示:" prop="region" class="region">
           <el-select
             v-model="value"
-            placeholder="请选择优惠券"
+            placeholder=""
             @change="optionGrant"
           >
             <el-option

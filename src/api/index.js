@@ -133,6 +133,7 @@ myPost.interceptors.response.use(response => {
     }
 }, error => {
     //错误跳转
+    console.log(error)
     if (error.response.status === 500) {
         console.log(vue)
         if (error.response.data.info != '参数错误') {
@@ -158,6 +159,7 @@ myGet.interceptors.response.use(response => {
     }
 }, error => {
     //错误跳转
+    console.log(error);
     if (error.response.status === 500) {
         if (error.response.data.info != '参数错误') {
             vue.$message.error(error.response.data.info);
