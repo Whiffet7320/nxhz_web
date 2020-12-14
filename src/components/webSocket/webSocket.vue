@@ -5,9 +5,6 @@
     </el-dialog>
     <div
       class="webSocketWrapper"
-      custom-class="custom"
-      :modal="false"
-      :show-close="false"
     >
       <div class="wxchatBorderLeft">
         <el-row>
@@ -745,13 +742,16 @@ export default {
 .websocket {
   height: 100%;
   width: 100%;
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 .webSocketWrapper {
-  transform: translate(-100%, -20%);
-  position: relative;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 798px;
 }
 .chatPop1 :hover {
   /* background-color: #fafafa; */
@@ -846,14 +846,14 @@ export default {
   border: 1px solid gray;
   display: inline-block;
   float: left;
-  margin-left: -20px;
-  margin-top: -60px;
+  /* margin-top: -60px; */
 }
 .userList {
-  position: absolute;
-  top: -20px;
-  width: 249px;
-  overflow-y: scroll;
+    position: absolute;
+    top: 38px;
+    width: 249px;
+    height: 632px;
+    overflow-y: scroll;
 }
 .userList .user div:hover {
   background-color: rgba(207, 209, 208, 1);
@@ -870,8 +870,8 @@ export default {
 }
 .leftContent {
   position: absolute;
-  top: -60px;
-  left: 232px;
+  /* top: -60px; */
+  left: 252px;
   width: 543px;
 }
 .wxchatPeople {

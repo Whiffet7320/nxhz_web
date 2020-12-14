@@ -98,7 +98,7 @@ export default {
     return {
       smdl: true,
       loginForm: {
-        username: "yunfeng",
+        username: "",
         password: "",
       },
     };
