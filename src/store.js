@@ -53,6 +53,13 @@ export default new Vuex.Store({
     couponData:null,
     coupon_display:null,
     mp3_say:false,
+    // 领取记录
+    couponUserList_total:null,//总数目
+    couponUserList_pageNum:1,//page页码
+    couponUserList_Search:null,
+    couponUserList_state:null,//领取状态(选择器)
+    couponUserList_coupon_type:null,//优惠券类型(选择器)
+    couponUserList_row:null,//点击详情传过去的row值
   },
   mutations: {
     mp3_say(state, boolean){
@@ -195,6 +202,25 @@ export default new Vuex.Store({
     },
     order_total(state, num) {//总数据
       state.order_total = num;
+    },
+    // 领取记录
+    couponUserList_total(state, num) {//总数据
+      state.couponUserList_total = num;
+    },
+    couponUserList_pageNum(state, num) {//页码
+      state.couponUserList_pageNum = num;
+    },
+    couponUserList_Search(state, str){
+      state.couponUserList_Search = str;
+    },
+    couponUserList_state(state, str){
+      state.couponUserList_state = str;
+    },
+    couponUserList_coupon_type(state, str){
+      state.couponUserList_coupon_type = str;
+    },
+    couponUserList_row(state, str){
+      state.couponUserList_row = str;
     },
   },
   actions: {

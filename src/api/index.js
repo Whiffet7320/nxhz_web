@@ -119,7 +119,6 @@ myGet.interceptors.request.use(config => {
         }
         // config.headers.token = sessionStorage.token;
     }
-    console.log(config)
     return config;
 }, error => {
     console.log(error);
@@ -524,6 +523,14 @@ export default {
     couponChange(obj) {//排序&显示&删除
         return myPost({
             url: urls.couponChange,
+            params: {
+                ...obj,
+            },
+        })
+    },
+    couponUserList(obj) {//优惠卷：领取列表
+        return myGet({
+            url: urls.couponUserList,
             params: {
                 ...obj,
             },

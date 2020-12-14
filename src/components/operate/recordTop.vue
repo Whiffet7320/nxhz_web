@@ -13,13 +13,22 @@
       >
         <!-- <div class="inline-box"> -->
         <el-form-item label="领取状态:" prop="region" class="region">
-          <el-select v-model="ruleForm.region" placeholder="已使用">
-            <el-option label="已使用" value="fu"></el-option>
-            <el-option label="未使用" value="fa"></el-option>
-            <el-option label="已过期" value="shou"></el-option>
+          <el-select v-model="value" placeholder="" @change="optionGrant">
+            <el-option label="未使用" value="0"></el-option>
+            <el-option label="已使用" value="1"></el-option>
+            <el-option label="已作废" value="2"></el-option>
+            <el-option label="已过期" value="3"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="领取时间" required class="time">
+        <el-form-item label="优惠券类型:" prop="region1" class="region">
+          <el-select v-model="value1" placeholder="" @change="optionGrant1">
+            <el-option label="全场通用" value="0"></el-option>
+            <el-option label="店铺" value="1"></el-option>
+            <el-option label="类目" value="2"></el-option>
+            <el-option label="指定商品" value="3"></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- <el-form-item label="领取时间" required class="time">
           <el-col :span="12">
             <el-form-item prop="date1">
               <el-date-picker
@@ -40,7 +49,7 @@
               ></el-time-picker>
             </el-form-item>
           </el-col>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item class="contentTop-btn">
           <el-button type="primary" @click="onSubmit" class="search"
@@ -56,11 +65,12 @@
         <div class="phone">
           <span>搜索:</span>
           <el-input
-            v-model="phoneInput"
-            placeholder="用户手机号/订单号"
+            v-model="search"
+            @keyup.enter.native="onSubmit"
+            placeholder="用户手机号/用户名称/优惠券名称"
           ></el-input>
         </div>
-        <div class="time">
+        <!-- <div class="time">
           <div class="block">
             <span class="spanLeft">使用时间</span>
             <el-date-picker v-model="value1" type="date" placeholder="选择日期">
@@ -76,7 +86,7 @@
             >
             </el-date-picker>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -85,6 +95,7 @@
 export default {
   data() {
     return {
+      search: "",
       ruleForm: {
         name: "",
         region: "",
@@ -95,20 +106,40 @@ export default {
         resource: "",
         desc: "",
       },
-      phoneInput: "",
       value1: "",
       value2: "",
+      value: "",
+      couponUserList_state: "",
+      couponUserList_coupon_type: "",
     };
   },
   methods: {
+    optionGrant(val) {
+      console.log(val);
+      this.couponUserList_state = val;
+    },
+    optionGrant1(val) {
+      console.log(val);
+      this.couponUserList_coupon_type = val;
+    },
     onSubmit() {
       console.log("submit!");
+      this.$store.commit("couponUserList_Search", this.search);
+      this.$store.commit("couponUserList_pageNum", 1);
+      this.$store.commit("couponUserList_state", this.couponUserList_state);
+      this.$store.commit(
+        "couponUserList_coupon_type",
+        this.couponUserList_coupon_type
+      );
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.phoneInput = "";
+      this.search = "";
+      this.value = "";
       this.value1 = "";
-      this.value2 = "";
+      this.couponUserList_state = "";
+      this.couponUserList_coupon_type = "";
+      this.onSubmit();
     },
   },
 };
@@ -133,56 +164,62 @@ export default {
   margin-top: 30px;
   margin-left: 30px;
 }
-.record-content .contentTop .right .el-form .region .el-form-item__content{
+.record-content .contentTop .right .el-form .region .el-form-item__content {
   width: 178px;
 }
-.record-content .contentTop .right .el-form .time .el-form-item__content .el-form-item{
+.record-content
+  .contentTop
+  .right
+  .el-form
+  .time
+  .el-form-item__content
+  .el-form-item {
   width: 182px;
 }
-.record-content .contentTop .right .el-form .contentTop-btn{
+.record-content .contentTop .right .el-form .contentTop-btn {
   margin-left: 20px;
 }
-.record-content  .contentTop .right .phoneTime{
+.record-content .contentTop .right .phoneTime {
   display: flex;
 }
-.record-content  .contentTop .right .phoneTime .time{
+.record-content .contentTop .right .phoneTime .time {
   display: flex;
   /* margin-left: 14px; */
 }
-.record-content  .contentTop .right .phoneTime .time .block{
+.record-content .contentTop .right .phoneTime .time .block {
   display: flex;
   align-items: center;
   margin-right: 10px;
 }
-.record-content  .contentTop .right .phoneTime .time .block .spanLeft{
+.record-content .contentTop .right .phoneTime .time .block .spanLeft {
   font-size: 14px;
-    color: #606266;
-    margin-right: 20px;
-    display: block;
-    width: 60px;
-    margin-left: 10px;
+  color: #606266;
+  margin-right: 20px;
+  display: block;
+  width: 60px;
+  margin-left: 10px;
 }
-.record-content  .contentTop .right .phoneTime .time .block span{
+.record-content .contentTop .right .phoneTime .time .block span {
   font-size: 14px;
-    color: #606266;
-    display: block;
-    width: 30px;
+  color: #606266;
+  display: block;
+  width: 30px;
 }
-.record-content  .contentTop .right .phoneTime .time .block .el-date-editor{
+.record-content .contentTop .right .phoneTime .time .block .el-date-editor {
   width: 140px;
 }
-.record-content  .contentTop .right .phone {
+.record-content .contentTop .right .phone {
   margin-left: 30px;
   display: flex;
   align-items: center;
 }
-.record-content  .contentTop .right .phone span {
+.record-content .contentTop .right .phone span {
   font-size: 14px;
   color: #606266;
   display: block;
   width: 108px;
 }
-.record-content  .contentTop .right .phone .el-input__inner {
-  width: 180px;
+.record-content .contentTop .right .phone .el-input__inner {
+  width: 240px;
 }
 </style>

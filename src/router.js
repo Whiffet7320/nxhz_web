@@ -132,6 +132,11 @@ const routes = [
                 name: 'record',
                 component: () => import('./components/operate/record.vue')
             },
+            {
+                path: 'recordDetails',
+                name: 'recordDetails',
+                component: () => import('./components/operate/record_details.vue')
+            },
         ]
     },
     {

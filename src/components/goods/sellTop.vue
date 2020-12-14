@@ -15,7 +15,7 @@
         <el-form-item label="分类:" prop="region" class="region">
           <div class="block">
             <el-cascader
-              v-model="selectValue"
+              v-model="mySelectValue"
               :options="myOptions"
               @change="handleChange"
               :props="{ checkStrictly: true }"
@@ -49,6 +49,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
+      mySelectValue:null,
       search: "",
       ruleForm: {
         name: "",
@@ -78,6 +79,7 @@ export default {
       this.$refs[formName].resetFields();
       this.search = "";
       this.myValue = [];
+      this.mySelectValue = '';
       this.$store.commit("good_pageNum", 1);
       this.onSubmit();
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="testBottom">
-    <el-table :data="myTableData" style="width: 100%" ref="multipleTable" v-loading="loading">
+    <el-table :data="myTableData" style="width: 100%" ref="multipleTable" >
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">

@@ -8,7 +8,7 @@
 <script>
 import ContentTop from './recordTop'
 import ContentBotton from './recordBottom'
-import Page from './testPage'
+import Page from './recordPage'
 export default {
   components:{
     ContentTop,

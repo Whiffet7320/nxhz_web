@@ -50,9 +50,9 @@
             <router-link :to="{ name: 'operatetest' }" tag="el-menu-item"
               >优惠券列表</router-link
             >
-            <!-- <router-link :to="{ name: 'record' }" tag="el-menu-item"
+            <router-link :to="{ name: 'record' }" tag="el-menu-item"
               >领取记录</router-link
-            > -->
+            >
           </el-submenu>
           <el-submenu index="5">
             <template slot="title">
