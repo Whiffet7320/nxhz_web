@@ -140,11 +140,18 @@ const routes = [
         ]
     },
     {
-        path: 'webSocket',//聊天室(客服)
-        name: 'webSocket',
+        path: '/web',//聊天室(客服)
+        name: 'web',
         // redirect: '/operate/operatetest',
-        component: () => import('./components/webSocket/webSocket.vue'),
+        component: () => import('./components/webSocket/index.vue'),
         // component:()=>import('./components/webSocket/player.vue')
+        children: [
+            {
+                path: 'webSocket',
+                name: 'webSocket',
+                component: () => import('./components/webSocket/webSocket.vue')
+            },
+        ]
     },
     {
         path: 'EditPassword',//修改个人信息页面

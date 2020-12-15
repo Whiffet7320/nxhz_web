@@ -163,6 +163,25 @@ export default {
   },
   mounted() {
     this.editor = new E("#editor");
+    this.editor.config.menus = [
+      "head",
+      "bold",
+      "fontSize",
+      "fontName",
+      "italic",
+      "underline",
+      "strikeThrough",
+      "indent",
+      "lineHeight",
+      "foreColor",
+      "backColor",
+      "list",
+      "justify",
+      "emoticon",
+      "table",
+      "undo",
+      "redo",
+    ];
     this.editor.create();
     this.editor.txt.html(this.description);
   },
@@ -309,9 +328,9 @@ export default {
 
             this.myTableData.forEach((ele, index) => {
               if (this.item_idArr.indexOf(ele.goods_id) == -1) {
-                setTimeout(()=>{
+                setTimeout(() => {
                   document.getElementsByClassName("el-checkbox")[index].click();
-                },1000)
+                }, 1000);
               }
               this.$set(ele, "checkedFather", true);
             });

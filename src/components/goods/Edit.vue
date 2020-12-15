@@ -79,7 +79,7 @@
                 <el-input v-model="scope.row.sku_id" placeholder=""></el-input>
               </template>
             </el-table-column> -->
-            <el-table-column prop="sale_attr_name" label="SKU名称">
+            <el-table-column prop="sale_attr_name" label="SKU名称" min-width="300">
               <template slot-scope="scope">
                 <el-input
                   v-model="scope.row.sale_attr_name"
@@ -87,12 +87,12 @@
                 ></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="name" label="库存">
+            <el-table-column prop="name" label="库存" min-width="150">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.storage" placeholder=""></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="address" label="成本价">
+            <el-table-column prop="address" label="成本价" min-width="150">
               <template slot-scope="scope">
                 <el-input
                   v-model="scope.row.prime_cost"
@@ -100,7 +100,7 @@
                 ></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="address" label="销售价">
+            <el-table-column prop="address" label="销售价" min-width="150">
               <template slot-scope="scope">
                 <el-input
                   v-model="scope.row.shop_price"
@@ -108,7 +108,7 @@
                 ></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="address" label="市场价">
+            <el-table-column prop="address" label="市场价" min-width="150">
               <template slot-scope="scope">
                 <el-input
                   v-model="scope.row.market_price"
@@ -116,7 +116,7 @@
                 ></el-input>
               </template>
             </el-table-column>
-            <el-table-column prop="address" label="SKU图">
+            <el-table-column prop="address" label="SKU图" min-width="150">
               <template slot-scope="scope">
                 <!-- <el-image
                   style="width: 60px; height: 60px"
@@ -158,7 +158,7 @@
               label="是否上架"
               class-name="column-bg-color-editable"
               show-overflow-tooltip
-              min-width="150"
+              min-width="200"
             >
               <template slot-scope="scope">
                 <el-radio v-model="scope.row.is_on_sale" :label="1"
@@ -169,7 +169,7 @@
                 >
               </template>
             </el-table-column>
-            <el-table-column prop="sort" label="排序">
+            <el-table-column prop="sort" label="排序" min-width="120">
               <template scope="scope">
                 <div class="input-box">
                   <!-- @blur="handleInputBlur" -->

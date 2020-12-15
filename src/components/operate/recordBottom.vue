@@ -140,7 +140,11 @@ export default {
           }
 
           ele.my_get_time = this.formatDate(new Date(ele.get_time * 1000));
-          ele.my_use_time = this.formatDate(new Date(ele.use_time * 1000));
+          if(ele.use_time == 0){
+            ele.my_use_time = ''
+          }else {
+            ele.my_use_time = this.formatDate(new Date(ele.use_time * 1000));
+          }
           ele.my_expiration_time = this.formatDate(
             new Date(ele.expiration_time * 1000)
           );

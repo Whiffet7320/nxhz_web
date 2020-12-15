@@ -1,18 +1,20 @@
 <template>
   <div class="wrapper" v-if="isLogin == 'true'">
-    <div class="wrapper-two">
-      <audio
-        controls="controls"
-        hidden
-        src="./assets/2653.mp3"
-        ref="audio"
-      ></audio>
-      <sys-header></sys-header>
-      <sys-menu></sys-menu>
-    </div>
-    <!-- <sys-content></sys-content> -->
-    <div class="right-content">
-      <router-view></router-view>
+    <sys-header></sys-header>
+    <div class="two">
+      <div class="wrapper-two">
+        <audio
+          controls="controls"
+          hidden
+          src="./assets/2653.mp3"
+          ref="audio"
+        ></audio>
+        <sys-menu></sys-menu>
+      </div>
+      <!-- <sys-content></sys-content> -->
+      <div class="right-content">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
   <div v-else>
@@ -53,10 +55,10 @@ export default {
     },
     mp3_play() {
       if (this.mp3_say) {
-        console.log('play')
+        console.log("play");
         this.$refs.audio.currentTime = 0; //从头开始播放提示音
         this.$refs.audio.play(); //播放
-        this.$store.commit('mp3_say',false)
+        this.$store.commit("mp3_say", false);
       }
     },
   },
@@ -78,8 +80,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 @import "./assets/index.css";
+.two {
+  display: flex;
+}
 body {
   min-width: 1200px;
   overflow: auto;
@@ -88,8 +93,9 @@ body {
   height: 100%;
 }
 .right-content {
-  height: calc(100% - 70px);
-  width: calc(100% - 200px);
+  width: calc(100%);
+  height: calc(100vh - 70px);
+  background-color: #fff;
   overflow-y: scroll;
 }
 .clearfloat {

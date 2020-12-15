@@ -5,12 +5,72 @@
         <p>评价管理</p>
         <span @click="backTo">返回上一页</span>
       </div>
-
+      <div class="from">
+        <el-form ref="form" :model="my_couponUserList_row" label-width="80px">
+          <el-form-item label="用户id：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.user_id"></el-input>
+          </el-form-item>
+          <el-form-item label="用户名称：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.nick_name"></el-input>
+          </el-form-item>
+          <el-form-item label="用户手机号：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.mobile"></el-input>
+          </el-form-item>
+          <el-form-item label="用户头像：">
+            <img
+              :src="my_couponUserList_row.head_pic"
+              alt=""
+              style="width: 100px; hieght: 100px"
+            />
+          </el-form-item>
+          <el-form-item label="使用的订单号：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.order_sn"></el-input>
+          </el-form-item>
+          <el-form-item label="优惠卷名称：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.coupon_name"></el-input>
+          </el-form-item>
+          <el-form-item label="优惠卷金额：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.coupon_money"></el-input>
+          </el-form-item>
+          <el-form-item label="满减条件：">
+            <el-input :disabled="true"
+              v-model="my_couponUserList_row.available_money"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="优惠券类型：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.my_coupon_type"></el-input>
+          </el-form-item>
+          <el-form-item label="记录id：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.id"></el-input>
+          </el-form-item>
+          <el-form-item label="领取时间：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.my_get_time"></el-input>
+          </el-form-item>
+          <el-form-item label="过期时间：">
+            <el-input :disabled="true"
+              v-model="my_couponUserList_row.my_expiration_time"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="使用状态：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.my_state"></el-input>
+          </el-form-item>
+          <el-form-item label="使用时间：" v-if="my_couponUserList_row.my_state!=='未使用'">
+            <el-input :disabled="true" v-model="my_couponUserList_row.my_use_time"></el-input>
+          </el-form-item>
+          <el-form-item label="相关id：">
+            <el-input :disabled="true" v-model="my_couponUserList_row.item_id"></el-input>
+          </el-form-item>
+          <el-form-item label="优惠券描述：">
+            <div id="editor"></div>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
+import E from "wangeditor";
 export default {
   data() {
     return {
@@ -21,16 +81,17 @@ export default {
     ...mapState(["couponUserList_row"]),
   },
   created() {
-    
     this.getData();
   },
   mounted() {
-    // let imgError = document.getElementsByClassName('el-image__error')[0]
-    // console.log(imgError)
+    this.editor = new E("#editor");
+    this.editor.create();
+    this.editor.txt.html(this.my_couponUserList_row.description);
   },
   methods: {
-    getData(){
-      console.log(this.couponUserList_row)
+    getData() {
+      this.my_couponUserList_row = this.couponUserList_row;
+      console.log(this.couponUserList_row);
     },
     formatDate(now) {
       var year = now.getFullYear(); //取得4位数的年份
@@ -59,22 +120,31 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .listDetails {
   min-height: 100%;
   width: 100%;
   box-sizing: border-box;
 }
-.flex_content {
+.listDetails #editor {
+  width: 840px;
+}
+.listDetails #editor .w-e-text-container {
+  max-height: 740px !important;
+}
+.listDetails #editor img {
+  max-width: 100%;
+}
+.listDetails .from .el-form-item {
   display: flex;
 }
-.tit {
-  display: flex;
-  align-items: center;
+.listDetails .from .el-form-item__content {
+  width: 300px;
+  margin-left: 20px !important;
 }
-.my_rato {
-  color: #ff9900;
-  transform: translate(10px, -1px);
+.listDetails .from .el-form-item__label {
+  width: 120px !important;
+  margin-right: 0px !important;
 }
 .details {
   width: 900px;
@@ -98,19 +168,5 @@ export default {
   margin-top: 18px;
   cursor: pointer;
   height: 23px;
-}
-.content .flex_content {
-  margin-top: 26px;
-}
-.content .flex_content.three {
-  margin-top: 26px;
-  margin-left: 16px;
-}
-.content .flex_content .tit {
-  margin-left: 10px;
-  transform: translateY(1px);
-}
-.content .flex_content .tit img {
-  margin-right: 8px;
 }
 </style>
