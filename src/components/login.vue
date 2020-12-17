@@ -119,10 +119,10 @@ export default {
             console.log(res.data.data);
             sessionStorage.setItem("token", res.data.data.token);
             sessionStorage.setItem("isLogin", true);
-            this.$router.push({ name: "test" });
-            setTimeout(() => {
+            // this.$router.push({ name: "test" });
+            // setTimeout(() => {
               this.$router.go(0);
-            }, 100);
+            // }, 1000);
           }
         });
     },

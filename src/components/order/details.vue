@@ -126,7 +126,7 @@ export default {
         }
       });
     } else {
-      this.$router.push({name:'testContent'})
+      this.$router.push({ name: "testContent" });
     }
   },
   methods: {
@@ -209,6 +209,11 @@ export default {
         this.myOrder.mobile.substring(7, 12) +
         "</div>\n" +
         "        <span>--------------------------------------------------</span>\n" +
+        "        <!--订单备注-->\n" +
+        '        <div style="font-size: 15px">订单备注:' +
+        this.myOrder.remark +
+        "</div>\n" +
+        "        <span>--------------------------------------------------</span>\n" +
         "      </div>";
       LODOP.ADD_PRINT_HTM(0, 0, "100%", "100%", html);
       LODOP.PRINT();
@@ -244,7 +249,7 @@ export default {
 };
 </script>
 <style>
-.details .title .print{
+.details .title .print {
   margin-left: 30px;
   margin-top: 10px;
   height: 40px !important;

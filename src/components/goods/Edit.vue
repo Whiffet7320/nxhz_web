@@ -478,7 +478,7 @@ export default {
     SKUhandleClick(scope) {
       //保存按钮
       if (this.skuStorageArr[scope.$index]) {
-        console.log(scope.row, scope.$index, this.skuStorageArr);
+        console.log(scope.row, scope.$index, this.skuStorageArr, this.skuStorageArr[scope.$index]);
         let num = this.skuStorageArr[scope.$index].toString();
         let newStorage = (scope.row.storage - num).toString();
         console.log(num, newStorage);
@@ -517,7 +517,9 @@ export default {
         console.log(skuNewObj2);
         this.$api.skuEdit(skuNewObj2).then((res) => {
           console.log(res);
-        });
+        }).then(()=>{
+          this.getData()
+        })
       } else {
         // 添加
         console.log(scope.row);
@@ -537,7 +539,9 @@ export default {
         };
         this.$api.skuEdit(skuNewObj).then((res) => {
           console.log(res);
-        });
+        }).then(()=>{
+          this.getData()
+        })
       }
     },
     getData() {
@@ -575,7 +579,7 @@ export default {
           this.skuStorageArr = [];
           this.skuList.forEach((ele) => {
             // ele.goods_img =
-            // console.log(ele.storage)
+            console.log(ele.storage)
             this.skuStorageArr.push(ele.storage);
           });
         });

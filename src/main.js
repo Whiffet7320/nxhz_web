@@ -66,8 +66,8 @@ function initWebSocket() {
 
     //判断页面有没有存在websocket连接123
     if (window.WebSocket) {
-      let ws = new WebSocket("ws://192.168.2.200:8282");//测试服
-      // let ws = new WebSocket("ws://119.3.155.113:8282");
+      // let ws = new WebSocket("ws://192.168.2.200:8282");//测试服
+      let ws = new WebSocket("ws://119.3.155.113:8282");
       console.log(ws)
       _this.ws = ws;
       ws.onopen = function () {
@@ -91,6 +91,7 @@ function initWebSocket() {
           LODOP.SET_PRINT_STYLE("FontSize", 18);
           LODOP.SET_PRINT_STYLE("Bold", 1);
           // LODOP.ADD_PRINT_TEXT(50, 231, 260, 39, "打印页面部分内容");
+          console.log(resData.data.content.order_goods)
           const body = resData.data.content.order_goods.map(i => {
             return ' <div style="display: flex"><span style="flex: 0 0 50%"><span>' + i.goods_name + '</span> <span style="font-size: 10px">[产品规格:' + i.goods_sku_name + ']</span></span> <span style="flex: 1 1 auto">*' + i.buy_number + '</span><span style="flex: 0 0 20%">' + i.shop_price * i.buy_number + '</span><br/> </div> ' +
               ''
@@ -124,6 +125,9 @@ function initWebSocket() {
             '        <div>收货人:' + resData.data.content.order.consignee.substring(0, 1) + '**' + '</div>\n' +
             '        <!-- 联系电话 -->\n' +
             '        <div>联系电话:' + resData.data.content.order.mobile.substring(0, 3) + '****' + resData.data.content.order.mobile.substring(7, 12) + '</div>\n' +
+            '        <span>--------------------------------------------------</span>\n' +
+            '        <!--订单备注-->\n' +
+            '        <div style="font-size: 15px">订单备注:' + resData.data.content.order.remark + '</div>\n' +
             '        <span>--------------------------------------------------</span>\n' +
             '      </div>'
           LODOP.ADD_PRINT_HTM(0, 0, "100%", "100%",
