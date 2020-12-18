@@ -154,6 +154,16 @@ myPost.interceptors.response.use(response => {
         router.push({ path: "/" })
         router.go(0)
         return Promise.reject();
+    } else if (error.response.status === 404) {
+        vue.$alert('页面不存在', '404错误', {
+            confirmButtonText: '确定',
+        });
+        return Promise.reject();
+    } else if (error.response.status === 402) {
+        vue.$alert('请求次数限制', '402错误', {
+            confirmButtonText: '确定',
+        });
+        return Promise.reject();
     } else {
         if (error.response.data.info != '参数错误') {
             vue.$message.error(error.response.data.info);
@@ -188,6 +198,16 @@ myGet.interceptors.response.use(response => {
         console.log(sessionStorage.getItem("isLogin"));
         router.push({ path: "/" })
         router.go(0)
+        return Promise.reject();
+    } else if (error.response.status === 404) {
+        vue.$alert('页面不存在', '404错误', {
+            confirmButtonText: '确定',
+        });
+        return Promise.reject();
+    } else if (error.response.status === 402) {
+        vue.$alert('请求次数限制', '402错误', {
+            confirmButtonText: '确定',
+        });
         return Promise.reject();
     } else {
         if (error.response.data.info != '参数错误') {
