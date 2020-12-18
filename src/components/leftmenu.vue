@@ -68,9 +68,9 @@
           <el-menu-item index="4-1" :route="{ name: 'operatetest' }"
             >优惠券列表</el-menu-item
           >
-          <!-- <el-menu-item index="4-2" :route="{ name: 'record' }"
+          <el-menu-item index="4-2" :route="{ name: 'record' }"
             >领取记录</el-menu-item
-          > -->
+          >
         </el-submenu>
         <el-submenu index="5">
           <template slot="title">
