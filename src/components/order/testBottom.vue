@@ -266,7 +266,7 @@ export default {
         keyword: this.mySearch,
         limit: this.myPer_page,
         page: this.myPageNum,
-        order_status:this.orderSelect
+        order_status: this.orderSelect,
       };
       console.log(orderListObj);
       this.$api.orderList(orderListObj).then((res) => {
@@ -326,10 +326,11 @@ export default {
   },
   created() {
     this.myPageNum = this.pageNum;
-    console.log(this.myPageNum);
+    // console.log(this.myPageNum);
     // this.$store.commit("pageNum", this.myPageNum);
-    console.log(this.$store.state.pageNum);
+    // console.log(this.$store.state.pageNum);
     this.$store.commit("per_page", 10);
+    this.mySearch = this.$store.state.order_testContent_search;
     this.getData();
   },
   watch: {
@@ -361,9 +362,12 @@ export default {
       this.getData();
     },
     "$store.state.startTime": function () {
-      console.log(1234444)
+      console.log(1234444);
       // this.myOrderSelect = this.$store.state.orderSelect;
       // console.log('xiugaile')
+      this.getData();
+    },
+    "$store.state.order_total": function () {
       this.getData();
     },
   },
