@@ -8,7 +8,7 @@
         layout="total, prev, pager, next, jumper,sizes"
         :total="this.myTotal"
         :page-sizes="[10, 15, 20, 30]"
-        :current-page="pageNum"
+        :current-page="list_pageNum"
         ref="page"
       >
       </el-pagination>
@@ -32,7 +32,7 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.$store.commit("pageNum", val);
+      this.$store.commit("list_pageNum", val);
     },
     getTotal() {
       this.myTotal = this.comment_total;
@@ -40,7 +40,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["comment_total", "pageNum"]),
+    ...mapState(["comment_total", "list_pageNum"]),
   },
   created() {
     // console.log(this.$refs);
@@ -50,9 +50,9 @@ export default {
     "$store.state.comment_total": function () {
       this.getTotal();
     },
-    "$store.state.pageNum": {
+    "$store.state.list_pageNum": {
       handler() {
-        if (this.$store.state.pageNum == 1) {
+        if (this.$store.state.list_pageNum == 1) {
           this.$refs.page.$children[2].$el.children[0].click();
         }
       },

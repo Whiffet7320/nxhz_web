@@ -108,7 +108,7 @@ export default {
   computed: {
     ...mapState([
       "order_commentList_search",
-      "pageNum",
+      "list_pageNum",
       "per_page",
       "orderSelect",
       "endTime_commentList",
@@ -121,8 +121,8 @@ export default {
       // console.log('xiugaile')
       this.getData();
     },
-    "$store.state.pageNum": function () {
-      this.myPageNum = this.$store.state.pageNum;
+    "$store.state.list_pageNum": function () {
+      this.myPageNum = this.$store.state.list_pageNum;
       this.getData();
       // setTimeout(() => {
       //   this.select();
@@ -145,6 +145,9 @@ export default {
       console.log(1234444);
       this.getData();
     },
+    "$store.state.comment_total": function () {
+      this.getData();
+    },
   },
   methods: {
     handleClick(row) {
@@ -154,7 +157,7 @@ export default {
       this.$router.push({ name: "listDetails" });
     },
     getData() {
-      console.log(this.myPer_page)
+      console.log(this.myPer_page);
       const orderListObj = {
         begin_time: this.startTime_commentList,
         end_time: this.endTime_commentList,
@@ -218,12 +221,13 @@ export default {
     },
   },
   created() {
-    this.myPageNum = this.pageNum;
-    console.log(this.myPageNum);
+    this.myPageNum = this.list_pageNum;
+    // console.log(this.myPageNum);
     // this.$store.commit("pageNum", this.myPageNum);
-    console.log(this.$store.state.pageNum);
+    // console.log(this.$store.state.pageNum);
     this.$store.commit("per_page", 10);
-    console.log(this.myPer_page)
+    this.mySearch = this.$store.state.order_commentList_search;
+    // console.log(this.myPer_page);
     this.getData();
   },
 };

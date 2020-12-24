@@ -25,6 +25,7 @@ export default new Vuex.Store({
     order_commentList_search:'',
     good_pageNum: 1,
     examine_pageNum:1,
+    list_pageNum:1,
     testPage_pageNum:1,
     addGrant_good_pageNum:1,
     toGrant_good_pageNum:1,
@@ -139,6 +140,9 @@ export default new Vuex.Store({
     },
     examine_pageNum(state, num) {// examine页码
       state.examine_pageNum = num;
+    },
+    list_pageNum(state, num) {// order的list页码
+      state.list_pageNum = num;
     },
     testPage_pageNum(state, num) {// testPage优惠券列表页码
       state.testPage_pageNum = num;
