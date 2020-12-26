@@ -101,12 +101,12 @@
           ></el-input>
         </el-form-item>
         <!-- 测试服 （正式服还未更新） -->
-        <!-- <el-form-item label="运费 :">
+        <el-form-item label="运费 :">
           <el-input
             v-model="data.freight"
             @keyup.enter.native="changeFreight(data.freight)"
           ></el-input>
-        </el-form-item> -->
+        </el-form-item>
         <!--  -->
       </div>
     </div>
@@ -243,17 +243,17 @@ export default {
   },
   methods: {
     //* 测试服 （正式服还未更新）
-    // changeFreight(num) {
-    //   //修改运费
-    //   console.log(num);
-    //   let obj = {
-    //     freight: num,
-    //   };
-    //   this.$api.infoChange(obj).then((res) => {
-    //     console.log(res);
-    //   });
-    // },
-    // 
+    changeFreight(num) {
+      //修改运费
+      console.log(num);
+      let obj = {
+        freight: num,
+      };
+      this.$api.infoChange(obj).then((res) => {
+        console.log(res);
+      });
+    },
+    
     changePassword(obj) {
       //修改密码
       this.centerDialogVisible = true;
