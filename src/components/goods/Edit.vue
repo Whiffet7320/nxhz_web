@@ -539,7 +539,14 @@ export default {
         };
         this.$api.skuEdit(skuNewObj).then((res) => {
           console.log(res);
-        }).then(()=>{
+          if(!res){
+            return true;
+          }
+        }).then((boolean)=>{
+          if(boolean){
+            return;
+          }
+          console.log('cyyzs')
           this.getData()
         })
       }
