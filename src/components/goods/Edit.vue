@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="form" :model="form" label-width="80px" class="shop-form">
+  <el-form ref="form" :model="form" label-width="80px" class="shop2-form">
     <div class="edit-formtwo">
       <div class="title">
         <p>订单详情页</p>
@@ -73,13 +73,64 @@
           :name="nameSort.nameS"
           v-if="sku_image_Flag"
         >
+          <el-button @click="SKUupLoaddialogVisible = true" plain
+            >SKU一键导入</el-button
+          >
+          <el-dialog
+            class="SKUupLoaddialog"
+            title="提示"
+            :visible.sync="SKUupLoaddialogVisible"
+            width="400px"
+          >
+            <div class="uploadStyle">
+              <el-upload
+                class="upload-demo"
+                ref="upload"
+                action="http://ufol.ngrok.farambi.top/shop/goods/sku/upload"
+                name="file"
+                drag
+                :headers="header"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :on-error="uploadFalse"
+                :on-success="uploadSuccess"
+                :auto-upload="false"
+                :on-change="handleChangeUpload"
+                :before-upload="beforeAvatarUpload"
+              >
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">
+                  将文件拖到此处，或<em>点击上传</em>
+                </div>
+                <div slot="tip" class="el-upload__tip">只能上传Xlsx文件</div>
+              </el-upload>
+              <el-button
+                size="small"
+                type="success"
+                @click="submitUpload"
+                icon="el-icon-finished"
+                >批量导入</el-button
+              >
+              <!-- <el-button icon="el-icon-download" type="danger" size="small">
+              <a href=" " download="文件模板.xlsx">
+                <span class="templateMedo">文件模板</span>
+              </a>
+            </el-button> -->
+            </div>
+          </el-dialog>
+
           <el-table :data="skuList" style="width: 100%">
             <!-- <el-table-column prop="sale_attr_name" label="SKU Id">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.sku_id" placeholder=""></el-input>
               </template>
             </el-table-column> -->
-            <el-table-column prop="sale_attr_name" label="SKU名称" min-width="300">
+            <el-table-column
+              prop="sale_attr_name"
+              label="SKU名称"
+              min-width="300"
+            >
               <template slot-scope="scope">
                 <el-input
                   v-model="scope.row.sale_attr_name"
@@ -240,6 +291,13 @@ import E from "wangeditor";
 export default {
   data() {
     return {
+      fileList: [],
+      header: {
+        token: sessionStorage.token,
+        "Access-Control-Allow-Origin": "*",
+        "access-control-allow-credentials": "true",
+      },
+      SKUupLoaddialogVisible: false,
       sku_image_Flag: true,
       radio_Flag: true,
       editor: null, //富文本
@@ -350,6 +408,56 @@ export default {
     companyList() {
       this.$refs.fileInputList.click();
     },
+    // sku一键上传
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList, "handleRemove");
+    },
+    uploadFalse() {
+      this.$message.error("文件导入失败！");
+    },
+    uploadSuccess(response, file, fileList) {
+      console.log(response, file, fileList);
+      if (response.status == 1) {
+        this.$message.success(response.info);
+      } else {
+        // console.log(fileList.indexOf(file))
+        fileList.splice(fileList.indexOf(file),1)
+        this.$message.error(response.info);
+      }
+      console.log(fileList);
+    },
+    handleChangeUpload(file, fileList) {
+      console.log(file, fileList, "handleChangeUpload");
+      // if (file.response.status !== 1) {
+      //   this.$message.error(file.response.info);
+      //   fileList.splice(-1, 1);
+      // }
+    },
+    beforeAvatarUpload(file) {
+      // const filename = file.name.split(".")[1];
+      const fileSize = file.size / 1024 / 1024;
+      // if (
+      //   filename !== "docx" &&
+      //   filename !== "xls" &&
+      //   filename !== "xlsx" &&
+      //   filename !== "doc"
+      // ) {
+      //   console.log(filename);
+      //   this.$message.error("上传模板只能是xls,xlsx,doc,docx格式");
+      // }
+      if (fileSize > 10) {
+        this.$message.error("上传模板不能超过10MB");
+      }
+    },
+    submitUpload() {
+      this.$refs.upload.submit();
+    },
+    // skuUploadCompany() {
+    //   this.$refs.skuUploadfileInput.click();
+    // },
     // sku图片上传
     skuCompany(scope) {
       // console.log(scope.$index);
@@ -366,6 +474,14 @@ export default {
       // console.log(this.$refs.`skufileInput${scope.$index}`)
       // console.log(this.$refs.skufileInput`${scope.$index}`)
       // this.$refs.skufileInput`${scope.$index}`.click()
+    },
+    skuUploadcompanyLogo(event) {
+      var file = event.target.files[0];
+      new FormData();
+      console.dir(FormData);
+      this.$api.skuUpload(file).then((res) => {
+        console.log(res);
+      });
     },
     companyLogo(event, type, scope) {
       var file = event.target.files[0];
@@ -478,7 +594,12 @@ export default {
     SKUhandleClick(scope) {
       //保存按钮
       if (this.skuStorageArr[scope.$index]) {
-        console.log(scope.row, scope.$index, this.skuStorageArr, this.skuStorageArr[scope.$index]);
+        console.log(
+          scope.row,
+          scope.$index,
+          this.skuStorageArr,
+          this.skuStorageArr[scope.$index]
+        );
         let num = this.skuStorageArr[scope.$index].toString();
         let newStorage = (scope.row.storage - num).toString();
         console.log(num, newStorage);
@@ -515,11 +636,14 @@ export default {
           sort: scope.row.sort,
         };
         console.log(skuNewObj2);
-        this.$api.skuEdit(skuNewObj2).then((res) => {
-          console.log(res);
-        }).then(()=>{
-          this.getData()
-        })
+        this.$api
+          .skuEdit(skuNewObj2)
+          .then((res) => {
+            console.log(res);
+          })
+          .then(() => {
+            this.getData();
+          });
       } else {
         // 添加
         console.log(scope.row);
@@ -537,18 +661,21 @@ export default {
           is_on_sale: scope.row.is_on_sale,
           sort: scope.row.sort,
         };
-        this.$api.skuEdit(skuNewObj).then((res) => {
-          console.log(res);
-          if(!res){
-            return true;
-          }
-        }).then((boolean)=>{
-          if(boolean){
-            return;
-          }
-          console.log('cyyzs')
-          this.getData()
-        })
+        this.$api
+          .skuEdit(skuNewObj)
+          .then((res) => {
+            console.log(res);
+            if (!res) {
+              return true;
+            }
+          })
+          .then((boolean) => {
+            if (boolean) {
+              return;
+            }
+            console.log("cyyzs");
+            this.getData();
+          });
       }
     },
     getData() {
@@ -586,7 +713,7 @@ export default {
           this.skuStorageArr = [];
           this.skuList.forEach((ele) => {
             // ele.goods_img =
-            console.log(ele.storage)
+            console.log(ele.storage);
             this.skuStorageArr.push(ele.storage);
           });
         });
@@ -739,36 +866,36 @@ export default {
 };
 </script>
 <style>
-.shop-form .img_cyy{
+.shop2-form .img_cyy {
   width: 100px;
   height: 100px;
 }
-.shop-form #editor {
+.shop2-form #editor {
   width: 840px;
 }
-.shop-form #editor .w-e-text-container {
+.shop2-form #editor .w-e-text-container {
   height: 740px !important;
 }
-.shop-form #editor img {
+.shop2-form #editor img {
   max-width: 100%;
 }
-.shop-form #editor .w-e-toolbar {
+.shop2-form #editor .w-e-toolbar {
   z-index: 1 !important;
 }
-.shop-form #editor .w-e-text-container {
+.shop2-form #editor .w-e-text-container {
   z-index: 0 !important;
 }
-.shop-form .displayN {
+.shop2-form .displayN {
   display: none;
 }
-.shop-form .imageCBtn {
+.shop2-form .imageCBtn {
   position: relative;
   height: 40px;
   width: 40px;
   margin-left: 20px;
   /* transform: translateY(-20px); */
 }
-.shop-form .blockImage {
+.shop2-form .blockImage {
   display: flex;
 }
 .blockImage .block {
@@ -793,11 +920,11 @@ export default {
   top: -5px;
   left: -5px;
 }
-.shop-form .companyButton {
+.shop2-form .companyButton {
   height: 100px !important;
   margin-left: 20px;
 }
-.shop-form .skucompanyButton {
+.shop2-form .skucompanyButton {
   height: 100px !important;
   transform: translate(0, 30px);
 }
@@ -813,7 +940,7 @@ export default {
 .cell.el-tooltip .el-radio {
   width: 60px !important;
 }
-.shop-form .addBtn {
+.shop2-form .addBtn {
   margin-top: 20px;
   /* float: right; */
   margin-left: 20px;
@@ -827,18 +954,18 @@ export default {
   top: -4px;
   left: -4px;
 }
-.shop-form .cell {
+.shop2-form .cell {
   width: 70%;
 }
 .myImg .el-form-item__content {
   display: flex;
 }
-.shop-form .el-tabs__content {
+.shop2-form .el-tabs__content {
   /* width: 100%;
   height: 100%; */
   margin-right: 60px;
 }
-.shop-form .el-form-item__content {
+.shop2-form .el-form-item__content {
   width: 428px !important;
 }
 .edit-formtwo {
@@ -911,14 +1038,14 @@ export default {
   margin-left: 20px;
   transform: translateY(-50%);
 }
-.shop-form .el-form-item {
+.shop2-form .el-form-item {
   display: flex;
 }
-.shop-form .el-form-item__content {
+.shop2-form .el-form-item__content {
   width: 320px;
   margin-left: 30px !important;
 }
-.shop-form {
+.shop2-form {
   /* padding-bottom: 100px; */
 }
 .el-image {
@@ -952,10 +1079,10 @@ export default {
   position: absolute;
   right: 10%;
 }
-.el-dialog.el-dialog--center {
+/* .el-dialog.el-dialog--center {
   height: 300px;
-}
-/* .el-form.shop-form{
+} */
+/* .el-form.shop2-form{
   display: flex;
   height: 1000px;
 }
@@ -968,5 +1095,9 @@ export default {
 } */
 .el-tabs__nav-wrap.is-top {
   width: 248px;
+}
+.SKUupLoaddialog .el-dialog{
+  width: 400px!important;
+
 }
 </style>

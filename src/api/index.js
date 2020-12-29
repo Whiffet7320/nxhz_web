@@ -556,4 +556,12 @@ export default {
             },
         })
     },
+    skuUpload(file){
+        return myPost({
+            url: urls.skuUpload,
+            params: {
+                file,
+            },
+        })
+    }
 }
