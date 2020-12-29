@@ -31,4 +31,5 @@ export default {
     shopUserList: '/shop/user/list',//用户列表
     couponChange:'/shop/coupon/change',//排序&显示&删除
     couponUserList:'/shop/coupon/user/list',//优惠卷：领取列表
+    skuUpload: '/shop/goods/sku/upload',//批量导入&批量更新
 }
