@@ -31,13 +31,7 @@
           >
           <el-menu-item index="2-2" :route="{ name: 'examine' }"
             >审核商品</el-menu-item
-          >
-          <!-- <router-link index="2-1" :to="{ name: 'sell' }" tag="el-menu-item"
-            >出售商品</router-link
-          >
-          <router-link index="2-2" :to="{ name: 'examine' }" tag="el-menu-item"
-            >审核商品</router-link
-          >  --> </el-submenu
+          > </el-submenu
         ><el-submenu index="3">
           <template slot="title">
             <i class="el-icon-s-order"></i>
@@ -49,16 +43,6 @@
           <el-menu-item index="3-2" :route="{ name: 'commentList' }"
             >评论列表</el-menu-item
           >
-          <!-- <router-link
-            :to="{ name: 'testContent', params: { id: 'testContent' } }"
-            tag="el-menu-item"
-            >订单列表</router-link
-          >
-          <router-link
-            :to="{ name: 'commentList', params: { id: 'commentList' } }"
-            tag="el-menu-item"
-            >评论列表</router-link
-          > -->
         </el-submenu>
         <el-submenu index="4">
           <template slot="title">
@@ -68,9 +52,9 @@
           <el-menu-item index="4-1" :route="{ name: 'operatetest' }"
             >优惠券列表</el-menu-item
           >
-          <!-- <el-menu-item index="4-2" :route="{ name: 'record' }"
+          <el-menu-item index="4-2" :route="{ name: 'record' }"
             >领取记录</el-menu-item
-          > -->
+          >
         </el-submenu>
         <el-submenu index="5">
           <template slot="title">
@@ -84,9 +68,6 @@
               >客服列表</el-badge
             ></el-menu-item
           >
-          <!-- <router-link :to="{ name: 'webSocket' }" tag="el-menu-item"
-            ><el-badge :is-dot="overallIsDot" class="item">客服列表</el-badge>
-          </router-link> -->
         </el-submenu>
       </el-menu>
     </el-col>
@@ -122,11 +103,14 @@ export default {
         this.default_active = "3-1";
       } else if (to.path == "/order/commentList") {
         this.default_active = "3-2";
-      } else if (to.path == "/operate/operatetest" || to.path == "/operate/toGrant") {
+      } else if (
+        to.path == "/operate/operatetest" ||
+        to.path == "/operate/toGrant"
+      ) {
         this.default_active = "4-1";
       } else if (to.path == "/operate/record") {
         this.default_active = "4-2";
-      }else if (to.path == "/web/webSocket") {
+      } else if (to.path == "/web/webSocket") {
         this.default_active = "5-1";
       }
     },
@@ -135,12 +119,12 @@ export default {
     myisColl() {
       this.isCollapse = !this.isCollapse;
     },
-    // getMatched() {
-    //   console.log(this.$route.path);
-    //   if (this.$route.path == "/operate/webSocket") {
-    //     this.default_active = "5-1";
-    //   }
-    // },
+    getMatched() {
+      console.log(this.$route.path);
+      if (this.$route.path == "/operate/webSocket") {
+        this.default_active = "5-1";
+      }
+    },
   },
 };
 </script>

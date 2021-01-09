@@ -375,7 +375,41 @@ export default {
     this.getData();
   },
   mounted() {
+    const that = this;
     this.editor = new E("#editor");
+    // this.editor.config.uploadImgServer = '/upload-img'
+    this.$api.ossststoken().then((res) => {
+      console.log(res.data.data.date);
+      let myData = res.data.data.date;
+      let client = new window.OSS.Wrapper({
+        region: "oss-cn-hangzhou", //oss地址
+        accessKeyId: myData.Credentials.AccessKeyId, //ak
+        accessKeySecret: myData.Credentials.AccessKeySecret, //secret
+        stsToken: myData.Credentials.SecurityToken,
+        bucket: "nxhzapp", //oss名字
+      });
+      this.editor.config.customUploadImg = async function (
+        resultFiles,
+        insertImgFn
+      ) {
+        // resultFiles 是 input 中选中的文件列表
+        // insertImgFn 是获取图片 url 后，插入到编辑器的方法
+        console.log(resultFiles);
+        var file_re = null;
+        var imgtype = resultFiles[0].type.substr(6, 4);
+        var store = `${new Date().getTime()}.${imgtype}`;
+        file_re = await that.readFileAsBuffer(resultFiles[0]);
+        // console.log(resultFiles[0]);
+        client
+          .put(store, file_re)
+          .then(function (res) {
+            insertImgFn(res.url);
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+      };
+    });
     this.editor.create();
     this.editor.txt.html(this.content);
   },
@@ -1087,7 +1121,7 @@ export default {
 .el-tabs__nav-wrap.is-top {
   width: 248px;
 }
-.SKUupLoaddialog .el-dialog{
-  width: 400px!important;
+.SKUupLoaddialog .el-dialog {
+  width: 400px !important;
 }
 </style>
