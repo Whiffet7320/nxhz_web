@@ -376,13 +376,13 @@ export default {
               let obj = {};
               if (this.oss_imgurl != "") {
                 obj = {
-                  type: "1",
+                  type: 1,
                   content: this.oss_imgurl,
                   user_id: this.contentChat.user_id,
                 };
               } else {
                 obj = {
-                  type: "0",
+                  type: 0,
                   content: this.inputValue,
                   user_id: this.contentChat.user_id,
                 };
@@ -561,7 +561,7 @@ export default {
           });
         } else {
           obj = {
-            type: "0",
+            type: 0,
             content: this.inputValue,
             user_id: this.contentChat.user_id,
           };
@@ -580,7 +580,7 @@ export default {
         }
       } else {
         obj = {
-          type: "1",
+          type: 1,
           content: this.oppinput,
           user_id: this.contentChat.user_id,
         };
