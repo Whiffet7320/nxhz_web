@@ -86,7 +86,7 @@
               <el-upload
                 class="upload-demo"
                 ref="upload"
-                action="http://ufol.ngrok.farambi.top/shop/goods/sku/upload"
+                action="http://api.xianfmei.com/shop/goods/sku/upload"
                 name="file"
                 drag
                 :headers="header"
