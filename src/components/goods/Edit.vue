@@ -73,52 +73,6 @@
           :name="nameSort.nameS"
           v-if="sku_image_Flag"
         >
-          <el-button @click="SKUupLoaddialogVisible = true" plain
-            >SKU一键导入</el-button
-          >
-          <el-dialog
-            class="SKUupLoaddialog"
-            title="提示"
-            :visible.sync="SKUupLoaddialogVisible"
-            width="400px"
-          >
-            <div class="uploadStyle">
-              <el-upload
-                class="upload-demo"
-                ref="upload"
-                action="http://api.xianfmei.com/shop/goods/sku/upload" 
-                name="file"
-                drag
-                :headers="header"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :file-list="fileList"
-                :on-error="uploadFalse"
-                :on-success="uploadSuccess"
-                :auto-upload="false"
-                :on-change="handleChangeUpload"
-                :before-upload="beforeAvatarUpload"
-              >
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">
-                  将文件拖到此处，或<em>点击上传</em>
-                </div>
-                <div slot="tip" class="el-upload__tip">只能上传Xlsx文件</div>
-              </el-upload>
-              <el-button
-                size="small"
-                type="success"
-                @click="submitUpload"
-                icon="el-icon-finished"
-                >批量导入</el-button
-              >
-              <!-- <el-button icon="el-icon-download" type="danger" size="small">
-              <a href=" " download="文件模板.xlsx">
-                <span class="templateMedo">文件模板</span>
-              </a>
-            </el-button> -->
-            </div>
-          </el-dialog>
           <el-table :data="skuList" style="width: 100%">
             <!-- <el-table-column prop="sale_attr_name" label="SKU Id">
               <template slot-scope="scope">
@@ -290,12 +244,6 @@ import E from "wangeditor";
 export default {
   data() {
     return {
-      fileList: [],
-      header: {
-        token: sessionStorage.token,
-        "Access-Control-Allow-Origin": "*",
-        "access-control-allow-credentials": "true",
-      },
       SKUupLoaddialogVisible: false,
       sku_image_Flag: true,
       radio_Flag: true,
@@ -441,56 +389,6 @@ export default {
     companyList() {
       this.$refs.fileInputList.click();
     },
-    // sku一键上传
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList, "handleRemove");
-    },
-    uploadFalse() {
-      this.$message.error("文件导入失败！");
-    },
-    uploadSuccess(response, file, fileList) {
-      console.log(response, file, fileList);
-      if (response.status == 1) {
-        this.$message.success(response.info);
-      } else {
-        // console.log(fileList.indexOf(file))
-        fileList.splice(fileList.indexOf(file), 1);
-        this.$message.error(response.info);
-      }
-      console.log(fileList);
-    },
-    handleChangeUpload(file, fileList) {
-      console.log(file, fileList, "handleChangeUpload");
-      // if (file.response.status !== 1) {
-      //   this.$message.error(file.response.info);
-      //   fileList.splice(-1, 1);
-      // }
-    },
-    beforeAvatarUpload(file) {
-      // const filename = file.name.split(".")[1];
-      const fileSize = file.size / 1024 / 1024;
-      // if (
-      //   filename !== "docx" &&
-      //   filename !== "xls" &&
-      //   filename !== "xlsx" &&
-      //   filename !== "doc"
-      // ) {
-      //   console.log(filename);
-      //   this.$message.error("上传模板只能是xls,xlsx,doc,docx格式");
-      // }
-      if (fileSize > 10) {
-        this.$message.error("上传模板不能超过10MB");
-      }
-    },
-    submitUpload() {
-      this.$refs.upload.submit();
-    },
-    // skuUploadCompany() {
-    //   this.$refs.skuUploadfileInput.click();
-    // },
     // sku图片上传
     skuCompany(scope) {
       // console.log(scope.$index);
