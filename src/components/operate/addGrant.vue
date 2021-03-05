@@ -90,7 +90,7 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="指定：">
-            <el-radio v-model="coupon_type" :label="1">指定店铺</el-radio>
+            <el-radio v-model="coupon_type" :label="1" @change="shops">指定店铺</el-radio>
             <el-radio v-model="coupon_type" :label="3" @change="shop"
               >指定商品</el-radio
             >
@@ -384,6 +384,11 @@ export default {
       }
     },
 
+    shops(){
+      console.log(this.item_idArr)
+      this.myitem_idArr = [];
+      this.item_idArr = []
+    },
     shop() {
       this.dialogFormVisible = true;
       this.flag = false;
